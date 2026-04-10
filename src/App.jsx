@@ -649,7 +649,39 @@ const GermanLearningJourney = () => {
     { german: "welcher/welche/welches", english: "which" }
   ];
 
- 
+  const alphabet = [
+    { letter: "A", name: "Ah" },
+    { letter: "B", name: "Beh" },
+    { letter: "C", name: "Tseh" },
+    { letter: "D", name: "Deh" },
+    { letter: "E", name: "Eh" },
+    { letter: "F", name: "Eff" },
+    { letter: "G", name: "Geh" },
+    { letter: "H", name: "Hah" },
+    { letter: "I", name: "Ee" },
+    { letter: "J", name: "Yott" },
+    { letter: "K", name: "Kah" },
+    { letter: "L", name: "Ell" },
+    { letter: "M", name: "Emm" },
+    { letter: "N", name: "Enn" },
+    { letter: "O", name: "Oh" },
+    { letter: "P", name: "Peh" },
+    { letter: "Q", name: "Kuh" },
+    { letter: "R", name: "Err" },
+    { letter: "S", name: "Ess" },
+    { letter: "T", name: "Teh" },
+    { letter: "U", name: "Uuh" },
+    { letter: "V", name: "Fau" },
+    { letter: "W", name: "Veh" },
+    { letter: "X", name: "Iks" },
+    { letter: "Y", name: "Ypsilon" },
+    { letter: "Z", name: "Tsett" },
+    { letter: "Ä", name: "Ae" },
+    { letter: "Ö", name: "Oe" },
+    { letter: "Ü", name: "Ue" },
+    { letter: "ß", name: "Eszett" }
+  ];
+
   const casesData = [
     {
       name: "Nominative", usage: "subject of the sentence (who/what is doing the action)",
@@ -729,7 +761,7 @@ const GermanLearningJourney = () => {
           🇩🇪 German Journey
         </motion.h1>
         <p className="text-xl md:text-2xl mt-6 text-gray-700 max-w-2xl">
-          Scroll down & learn <span className="font-bold">numbers, pronouns, question words, sentence structure, 182 chunks, 100 verbs, 354 nouns</span> — plus days, months, colors!
+          Scroll down & learn <span className="font-bold">alphabet, numbers, pronouns, question words, sentence structure, 182 chunks, 100 verbs, 354 nouns</span> — plus days, months, colors!
         </p>
         <p className="text-md mt-2 text-gray-600">🔊 Click speaker for pronunciation. 📖 Click book icon for full conjugation with pronunciation of each form.</p>
         <div className="mt-12 animate-bounce">👇</div>
@@ -775,6 +807,26 @@ const GermanLearningJourney = () => {
         </ScrollReveal>
       </div>
 
+      <div className="max-w-6xl mx-auto px-4 py-16">
+        <ScrollReveal>
+          <div className="bg-white/70 rounded-3xl p-8 shadow-2xl">
+            <h2 className="text-3xl font-bold text-center mb-2">🔤 German Alphabet (Letters with Pronunciation)</h2>
+            <p className="text-center text-gray-600 mb-6">Learn the names of each letter – click the speaker to hear the correct pronunciation</p>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+              {alphabet.map((letterObj) => (
+                <div key={letterObj.letter} className="bg-white p-3 rounded-xl shadow flex items-center justify-between hover:bg-gray-50 transition">
+                  <div>
+                    <span className="text-xl font-bold text-purple-700">{letterObj.letter}</span>
+                    <span className="text-gray-500 text-sm ml-2">– {letterObj.name}</span>
+                  </div>
+                  <PronounceButton word={letterObj.name} />
+                </div>
+              ))}
+            </div>
+            <div className="text-center mt-6 text-sm font-semibold text-green-700">✅ 30 letters including Umlauts (Ä, Ö, Ü) and Eszett (ß) – practice pronunciation daily!</div>
+          </div>
+        </ScrollReveal>
+      </div>
 
       <div className="max-w-6xl mx-auto px-4 py-16">
         <ScrollReveal>
@@ -945,7 +997,7 @@ const GermanLearningJourney = () => {
                     <thead>
                       <tr className="border-b">
                         <th className="text-left">Gender</th><th>Article</th>
-                      </tr>
+                       </tr>
                     </thead>
                     <tbody>
                       <tr><td>der (masc)</td><td>{c.articles.der}</td></tr>
@@ -1052,7 +1104,7 @@ const GermanLearningJourney = () => {
                 <thead>
                   <tr className="bg-gray-200">
                     <th className="p-2">Positive</th><th>Comparative (+er)</th><th>Superlative (am ...sten)</th><th>Meaning</th><th>Pronounce</th>
-                  </tr>
+                   </tr>
                 </thead>
                 <tbody>
                   {adjComparatives.map(adj => (
@@ -1136,7 +1188,7 @@ const GermanLearningJourney = () => {
           <h2 className="text-4xl font-bold text-white">🎉 Herzlichen Glückwunsch! 🎉</h2>
           <p className="text-xl text-white mt-4">You've completed the German learning journey!</p>
           <div className="mt-6 text-white text-lg">
-            <p>📚 You learned: <strong>Numbers, Pronouns, Sentence Structure, Cases, Prepositions, Separable Verbs, Modal Particles, Comparatives, Past Tenses, 100 verbs, 354 nouns, 182 chunks</strong> + more!</p>
+            <p>📚 You learned: <strong>Alphabet, Numbers, Pronouns, Sentence Structure, Cases, Prepositions, Separable Verbs, Modal Particles, Comparatives, Past Tenses, 100 verbs, 354 nouns, 182 chunks</strong> + more!</p>
             <p className="mt-2">✨ Keep practicing and you'll be fluent in no time! ✨</p>
           </div>
           <button onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})} className="mt-8 bg-white text-orange-600 px-6 py-3 rounded-full font-bold shadow-lg hover:scale-105 transition">⬆️ Start Over</button>

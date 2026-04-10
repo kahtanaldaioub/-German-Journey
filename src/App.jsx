@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, useAnimation, useInView } from 'framer-motion';
-import { Analytics } from "@vercel/analytics/next"
 const speakGerman = (text) => {
   if (!window.speechSynthesis) {
     alert("Sorry, your browser does not support speech synthesis.");
@@ -766,7 +765,6 @@ const GermanLearningJourney = () => {
         <p className="text-md mt-2 text-gray-600">🔊 Click speaker for pronunciation. 📖 Click book icon for full conjugation with pronunciation of each form.</p>
         <div className="mt-12 animate-bounce">👇</div>
       </section>
-      <Analytics/>
 
       <div className="max-w-6xl mx-auto px-4 py-16">
         <ScrollReveal>

@@ -267,7 +267,232 @@ const nounsRaw = [
   { article: "der", german: "Frieden", english: "peace" }, { article: "die", german: "Freiheit", english: "freedom" },
   { article: "das", german: "Abenteuer", english: "adventure" }
 ];
-let nouns = [...nounsRaw];
+
+const additionalNouns = [
+  // Food & Drink (more)
+  { article: "der", german: "Apfelsaft", english: "apple juice" },
+  { article: "die", german: "Orange", english: "orange" },
+  { article: "das", german: "Ei", english: "egg" },
+  { article: "der", german: "Joghurt", english: "yogurt" },
+  { article: "die", german: "Butter", english: "butter" },
+  { article: "der", german: "Käse", english: "cheese" },
+  { article: "die", german: "Wurst", english: "sausage" },
+  { article: "das", german: "Salz", english: "salt" },
+  { article: "der", german: "Pfeffer", english: "pepper" },
+  { article: "der", german: "Zucker", english: "sugar" },
+  { article: "das", german: "Mehl", english: "flour" },
+  { article: "das", german: "Öl", english: "oil" },
+  { article: "der", german: "Reis", english: "rice" },
+  { article: "die", german: "Nudel", english: "noodle" },
+  { article: "die", german: "Kartoffel", english: "potato" },
+  { article: "die", german: "Tomate", english: "tomato" },
+  { article: "die", german: "Gurke", english: "cucumber" },
+  { article: "der", german: "Salat", english: "salad" },
+  { article: "die", german: "Zwiebel", english: "onion" },
+  { article: "der", german: "Knoblauch", english: "garlic" },
+  { article: "der", german: "Apfelkuchen", english: "apple pie" },
+  { article: "die", german: "Schokolade", english: "chocolate" }, // already exists? fine
+  { article: "der", german: "Keks", english: "cookie" },
+  { article: "das", german: "Eis", english: "ice cream" }, // exists
+  { article: "der", german: "Honig", english: "honey" }, // exists
+  { article: "die", german: "Marmelade", english: "jam" }, // exists
+
+  // Clothing
+  { article: "das", german: "Hemd", english: "shirt" },
+  { article: "die", german: "Hose", english: "pants" },
+  { article: "das", german: "Kleid", english: "dress" },
+  { article: "der", german: "Rock", english: "skirt" },
+  { article: "die", german: "Jacke", english: "jacket" },
+  { article: "der", german: "Schuh", english: "shoe" },
+  { article: "die", german: "Socke", english: "sock" },
+  { article: "der", german: "Hut", english: "hat" },
+  { article: "die", german: "Mütze", english: "cap" },
+  { article: "der", german: "Schal", english: "scarf" },
+  { article: "die", german: "Handschuh", english: "glove" },
+  { article: "der", german: "Gürtel", english: "belt" },
+  { article: "die", german: "Tasche", english: "bag" },
+  { article: "der", german: "Rucksack", english: "backpack" },
+  { article: "der", german: "Regenschirm", english: "umbrella" },
+
+  // Household & Furniture (more)
+  { article: "der", german: "Schlüssel", english: "key" },
+  { article: "die", german: "Türklingel", english: "doorbell" },
+  { article: "das", german: "Regal", english: "shelf" },
+  { article: "der", german: "Teppich", english: "carpet" },
+  { article: "die", german: "Lampe", english: "lamp" }, // exists
+  { article: "das", german: "Bild", english: "picture" },
+  { article: "der", german: "Spiegel", english: "mirror" },
+  { article: "die", german: "Waschmaschine", english: "washing machine" },
+  { article: "der", german: "Kühlschrank", english: "refrigerator" },
+  { article: "der", german: "Herd", english: "stove" },
+  { article: "die", german: "Mikrowelle", english: "microwave" },
+  { article: "der", german: "Staubsauger", english: "vacuum cleaner" },
+  { article: "der", german: "Besen", english: "broom" },
+  { article: "der", german: "Eimer", english: "bucket" },
+  { article: "das", german: "Handtuch", english: "towel" },
+  { article: "die", german: "Seife", english: "soap" },
+  { article: "das", german: "Shampoo", english: "shampoo" },
+  { article: "die", german: "Zahnbürste", english: "toothbrush" },
+  { article: "die", german: "Zahnpasta", english: "toothpaste" },
+
+  // Work & School
+  { article: "der", german: "Beruf", english: "profession" },
+  { article: "die", german: "Arbeitsstelle", english: "job position" },
+  { article: "der", german: "Kollege", english: "colleague (m)" },
+  { article: "die", german: "Kollegin", english: "colleague (f)" },
+  { article: "der", german: "Chef", english: "boss (m)" },
+  { article: "die", german: "Chefin", english: "boss (f)" },
+  { article: "das", german: "Gehalt", english: "salary" },
+  { article: "die", german: "Pause", english: "break" },
+  { article: "der", german: "Urlaub", english: "vacation" }, // exists
+  { article: "die", german: "Klausur", english: "exam" },
+  { article: "der", german: "Test", english: "test" },
+  { article: "die", german: "Hausaufgabe", english: "homework" },
+  { article: "der", german: "Unterricht", english: "class/lesson" },
+  { article: "die", german: "Universität", english: "university" },
+  { article: "der", german: "Student", english: "student (m)" },
+  { article: "die", german: "Studentin", english: "student (f)" },
+  { article: "der", german: "Lehrer", english: "teacher (m)" }, // exists
+  { article: "die", german: "Lehrerin", english: "teacher (f)" }, // exists
+  { article: "das", german: "Klassenzimmer", english: "classroom" },
+  { article: "die", german: "Tafel", english: "blackboard" },
+  { article: "der", german: "Stift", english: "pen" },
+  { article: "der", german: "Bleistift", english: "pencil" },
+  { article: "der", german: "Radiergummi", english: "eraser" },
+  { article: "das", german: "Lineal", english: "ruler" },
+  { article: "der", german: "Spitzer", english: "sharpener" },
+  { article: "das", german: "Papier", english: "paper" },
+  { article: "der", german: "Ordner", english: "folder" },
+
+  // Travel & Transport (more)
+  { article: "der", german: "Flug", english: "flight" },
+  { article: "die", german: "Fahrkarte", english: "ticket" }, // ticket exists
+  { article: "der", german: "Koffer", english: "suitcase" },
+  { article: "der", german: "Rucksack", english: "backpack" }, // repeat
+  { article: "der", german: "Reisepass", english: "passport" },
+  { article: "der", german: "Ausweis", english: "ID card" },
+  { article: "das", german: "Hotel", english: "hotel" },
+  { article: "die", german: "Jugendherberge", english: "youth hostel" },
+  { article: "der", german: "Campingplatz", english: "campsite" },
+  { article: "der", german: "Strand", english: "beach" },
+  { article: "der", german: "See", english: "lake" }, // exists
+  { article: "der", german: "Berg", english: "mountain" }, // exists
+  { article: "der", german: "Wald", english: "forest" },
+  { article: "die", german: "Brücke", english: "bridge" },
+  { article: "der", german: "Tunnel", english: "tunnel" },
+  { article: "die", german: "Ampel", english: "traffic light" },
+  { article: "der", german: "Parkplatz", english: "parking lot" },
+  { article: "die", german: "Tankstelle", english: "gas station" },
+
+  // Body & Health (more)
+  { article: "der", german: "Körper", english: "body" }, // exists
+  { article: "die", german: "Schulter", english: "shoulder" },
+  { article: "der", german: "Ellbogen", english: "elbow" },
+  { article: "das", german: "Handgelenk", english: "wrist" },
+  { article: "der", german: "Daumen", english: "thumb" },
+  { article: "der", german: "Nagel", english: "nail" },
+  { article: "das", german: "Knie", english: "knee" },
+  { article: "der", german: "Fuß", english: "foot" },
+  { article: "die", german: "Ferse", english: "heel" },
+  { article: "der", german: "Bauch", english: "belly" },
+  { article: "die", german: "Lunge", english: "lung" },
+  { article: "der", german: "Magen", english: "stomach" },
+  { article: "die", german: "Krankheit", english: "illness" },
+  { article: "der", german: "Arzt", english: "doctor (m)" },
+  { article: "die", german: "Ärztin", english: "doctor (f)" },
+  { article: "die", german: "Apotheke", english: "pharmacy" },
+  { article: "das", german: "Medikament", english: "medicine" },
+  { article: "das", german: "Krankenhaus", english: "hospital" },
+  { article: "der", german: "Krankenschwester", english: "nurse (f)" },
+  { article: "der", german: "Krankenpfleger", english: "nurse (m)" },
+
+  // Nature & Weather (more)
+  { article: "der", german: "Mond", english: "moon" },
+  { article: "der", german: "Stern", english: "star" },
+  { article: "die", german: "Erde", english: "earth" },
+  { article: "das", german: "Wasser", english: "water" }, // exists
+  { article: "der", german: "Wind", english: "wind" },
+  { article: "das", german: "Gewitter", english: "thunderstorm" },
+  { article: "der", german: "Blitz", english: "lightning" },
+  { article: "der", german: "Donner", english: "thunder" },
+  { article: "der", german: "Nebel", english: "fog" },
+  { article: "das", german: "Eis", english: "ice" }, // exists
+  { article: "der", german: "Schnee", english: "snow" }, // exists
+  { article: "der", german: "Regen", english: "rain" }, // exists
+
+  // Abstract & Feelings
+  { article: "die", german: "Freude", english: "joy" },
+  { article: "der", german: "Schmerz", english: "pain" },
+  { article: "die", german: "Trauer", english: "sorrow" },
+  { article: "der", german: "Mut", english: "courage" },
+  { article: "die", german: "Geduld", english: "patience" },
+  { article: "der", german: "Erfolg", english: "success" },
+  { article: "der", german: "Fehler", english: "mistake" },
+  { article: "die", german: "Hilfe", english: "help" },
+  { article: "die", german: "Antwort", english: "answer" },
+  { article: "die", german: "Frage", english: "question" },
+  { article: "die", german: "Geschichte", english: "story/history" },
+  { article: "der", german: "Traum", english: "dream" }, // exists
+  { article: "die", german: "Wirklichkeit", english: "reality" },
+  { article: "die", german: "Möglichkeit", english: "possibility" },
+  { article: "die", german: "Entscheidung", english: "decision" },
+
+  // Time & Calendar (more)
+  { article: "der", german: "Tag", english: "day" },
+  { article: "die", german: "Nacht", english: "night" }, // exists
+  { article: "die", german: "Stunde", english: "hour" },
+  { article: "die", german: "Minute", english: "minute" },
+  { article: "die", german: "Sekunde", english: "second" },
+  { article: "der", german: "Kalender", english: "calendar" },
+  { article: "der", german: "Termin", english: "appointment" },
+  { article: "die", german: "Uhrzeit", english: "time (clock time)" },
+  { article: "der", german: "Anfang", english: "beginning" },
+  { article: "das", german: "Ende", english: "end" },
+
+  // Family & People (more)
+  { article: "der", german: "Vater", english: "father" },
+  { article: "die", german: "Mutter", english: "mother" },
+  { article: "der", german: "Sohn", english: "son" },
+  { article: "die", german: "Tochter", english: "daughter" },
+  { article: "der", german: "Bruder", english: "brother" },
+  { article: "die", german: "Schwester", english: "sister" },
+  { article: "der", german: "Großvater", english: "grandfather" },
+  { article: "die", german: "Großmutter", english: "grandmother" },
+  { article: "der", german: "Onkel", english: "uncle" },
+  { article: "die", german: "Tante", english: "aunt" },
+  { article: "der", german: "Cousin", english: "cousin (m)" },
+  { article: "die", german: "Cousine", english: "cousin (f)" },
+  { article: "der", german: "Nachbar", english: "neighbor (m)" },
+  { article: "die", german: "Nachbarin", english: "neighbor (f)" },
+  { article: "der", german: "Bekannte", english: "acquaintance (m)" },
+  { article: "die", german: "Bekannte", english: "acquaintance (f)" },
+
+  // Shopping & Money
+  { article: "der", german: "Preis", english: "price" },
+  { article: "die", german: "Rechnung", english: "bill" },
+  { article: "das", german: "Geld", english: "money" }, // exists
+  { article: "die", german: "Kasse", english: "checkout" },
+  { article: "der", german: "Einkaufswagen", english: "shopping cart" },
+  { article: "die", german: "Tüte", english: "bag" },
+  { article: "der", german: "Bon", english: "receipt" },
+  { article: "die", german: "Kreditkarte", english: "credit card" },
+  { article: "das", german: "Bargeld", english: "cash" },
+  { article: "der", german: "Rabatt", english: "discount" },
+
+  // Media & Technology
+  { article: "das", german: "Internet", english: "internet" },
+  { article: "die", german: "Website", english: "website" },
+  { article: "die", german: "E-Mail", english: "email" },
+  { article: "das", german: "Passwort", english: "password" },
+  { article: "der", german: "Bildschirm", english: "screen" },
+  { article: "die", german: "Tastatur", english: "keyboard" },
+  { article: "die", german: "Maus", english: "mouse" }, // exists
+  { article: "der", german: "Drucker", english: "printer" },
+  { article: "der", german: "Lautsprecher", english: "speaker" },
+  { article: "das", german: "Handy", english: "cellphone" }, // exists
+  { article: "der", german: "Fernseher", english: "TV" }, // exists
+];
+let nouns = [...nounsRaw, ...additionalNouns];
 
 const chunksArray = [
   { german: "Hallo!", english: "Hello!" }, { german: "Guten Morgen!", english: "Good morning!" },
@@ -504,7 +729,7 @@ const GermanLearningJourney = () => {
           🇩🇪 German Journey
         </motion.h1>
         <p className="text-xl md:text-2xl mt-6 text-gray-700 max-w-2xl">
-          Scroll down & learn <span className="font-bold">numbers, pronouns, question words, sentence structure, 182 chunks, 100 verbs, 155 nouns</span> — plus days, months, colors!
+          Scroll down & learn <span className="font-bold">numbers, pronouns, question words, sentence structure, 182 chunks, 100 verbs, 354 nouns</span> — plus days, months, colors!
         </p>
         <p className="text-md mt-2 text-gray-600">🔊 Click speaker for pronunciation. 📖 Click book icon for full conjugation with pronunciation of each form.</p>
         <div className="mt-12 animate-bounce">👇</div>
@@ -666,7 +891,7 @@ const GermanLearningJourney = () => {
       <div className="max-w-6xl mx-auto px-4 py-16">
         <ScrollReveal>
           <div className="bg-white/70 rounded-3xl p-8 shadow-2xl">
-            <h2 className="text-3xl font-bold text-center mb-2">🏷️ 155 Nouns (with Articles)</h2>
+            <h2 className="text-3xl font-bold text-center mb-2">🏷️ 354 Nouns (with Articles)</h2>
             <p className="text-center text-gray-600 mb-6">der, die, das – master the gender</p>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 max-h-[600px] overflow-y-auto p-2">
               {nouns.map((noun, idx) => (
@@ -911,7 +1136,7 @@ const GermanLearningJourney = () => {
           <h2 className="text-4xl font-bold text-white">🎉 Herzlichen Glückwunsch! 🎉</h2>
           <p className="text-xl text-white mt-4">You've completed the German learning journey!</p>
           <div className="mt-6 text-white text-lg">
-            <p>📚 You learned: <strong>Numbers, Pronouns, Sentence Structure, Cases, Prepositions, Separable Verbs, Modal Particles, Comparatives, Past Tenses, 100 verbs, 155 nouns, 182 chunks</strong> + more!</p>
+            <p>📚 You learned: <strong>Numbers, Pronouns, Sentence Structure, Cases, Prepositions, Separable Verbs, Modal Particles, Comparatives, Past Tenses, 100 verbs, 354 nouns, 182 chunks</strong> + more!</p>
             <p className="mt-2">✨ Keep practicing and you'll be fluent in no time! ✨</p>
           </div>
           <button onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})} className="mt-8 bg-white text-orange-600 px-6 py-3 rounded-full font-bold shadow-lg hover:scale-105 transition">⬆️ Start Over</button>

@@ -492,7 +492,6 @@ const additionalNouns = [
   { article: "der", german: "Fernseher", english: "TV" }, // exists
 ];
 let nouns = [...nounsRaw, ...additionalNouns];
-
 const chunksArray = [
   { german: "Hallo!", english: "Hello!" }, { german: "Guten Morgen!", english: "Good morning!" },
   { german: "Guten Tag!", english: "Good day!" }, { german: "Guten Abend!", english: "Good evening!" },
@@ -584,7 +583,95 @@ const chunksArray = [
   { german: "Gib nicht auf!", english: "Don't give up!" }, { german: "Du bist toll!", english: "You're great!" },
   { german: "Ich bin stolz auf dich", english: "I'm proud of you" }, { german: "Lass uns feiern", english: "Let's celebrate" },
   { german: "Das Leben ist schön", english: "Life is beautiful" }, { german: "Genieße den Moment", english: "Enjoy the moment" },
-  { german: "Danke für alles", english: "Thanks for everything" }, { german: "Bis zum nächsten Mal!", english: "Until next time!" }
+  { german: "Danke für alles", english: "Thanks for everything" }, { german: "Bis zum nächsten Mal!", english: "Until next time!" },
+
+  // ========== NEW A2-LEVEL CHUNKS ==========
+  { german: "Ich habe gegessen", english: "I ate" },
+  { german: "Wir sind nach Berlin gefahren", english: "We went to Berlin" },
+  { german: "Hast du das gesehen?", english: "Did you see that?" },
+  { german: "Ich werde morgen lernen", english: "I will study tomorrow" },
+  { german: "Wirst du kommen?", english: "Will you come?" },
+  { german: "Ich kann Deutsch sprechen", english: "I can speak German" },
+  { german: "Du musst pünktlich sein", english: "You must be on time" },
+  { german: "Darf ich das Fenster öffnen?", english: "May I open the window?" },
+  { german: "Ich möchte einen Kaffee", english: "I would like a coffee" },
+  { german: "Soll ich dir helfen?", english: "Should I help you?" },
+  { german: "Deutsch ist schwerer als Englisch", english: "German is harder than English" },
+  { german: "Mein Auto ist schneller als deins", english: "My car is faster than yours" },
+  { german: "So teuer wie ein Flugzeug", english: "As expensive as a plane" },
+  { german: "Ich denke, dass das richtig ist", english: "I think that's right" },
+  { german: "Ich weiß nicht, ob er kommt", english: "I don't know if he's coming" },
+  { german: "Bevor wir essen, waschen wir die Hände", english: "Before we eat, we wash our hands" },
+  { german: "Nach der Arbeit gehe ich nach Hause", english: "After work I go home" },
+  { german: "vor einer Woche", english: "a week ago" },
+  { german: "in zwei Tagen", english: "in two days" },
+  { german: "seit drei Jahren", english: "for three years" },
+  { german: "von Montag bis Freitag", english: "from Monday to Friday" },
+  { german: "Wie ist das Wetter heute?", english: "How's the weather today?" },
+  { german: "Es regnet", english: "It's raining" },
+  { german: "Es ist sonnig", english: "It's sunny" },
+  { german: "Es ist bewölkt", english: "It's cloudy" },
+  { german: "Es schneit", english: "It's snowing" },
+  { german: "Die Temperatur ist 20 Grad", english: "The temperature is 20 degrees" },
+  { german: "Mir tut der Kopf weh", english: "My head hurts" },
+  { german: "Ich habe Fieber", english: "I have a fever" },
+  { german: "Nehmen Sie diese Tabletten", english: "Take these tablets" },
+  { german: "Ich muss einen Termin vereinbaren", english: "I need to make an appointment" },
+  { german: "Wann haben Sie Zeit?", english: "When do you have time?" },
+  { german: "Mein Hobby ist Fußball spielen", english: "My hobby is playing soccer" },
+  { german: "Ich lese gerne Bücher", english: "I like reading books" },
+  { german: "Hast du Hobbys?", english: "Do you have hobbies?" },
+  { german: "Was machst du in deiner Freizeit?", english: "What do you do in your free time?" },
+  { german: "Ich gehe ins Kino", english: "I'm going to the cinema" },
+  { german: "Magst du Musik?", english: "Do you like music?" },
+  { german: "Ich höre gerne Rockmusik", english: "I like listening to rock music" },
+  { german: "Kannst du mir den Weg zum Bahnhof zeigen?", english: "Can you show me the way to the station?" },
+  { german: "Gehen Sie geradeaus bis zur Ampel", english: "Go straight ahead to the traffic light" },
+  { german: "Dann links abbiegen", english: "Then turn left" },
+  { german: "Es ist etwa fünf Minuten zu Fuß", english: "It's about five minutes on foot" },
+  { german: "Das ist interessant", english: "That's interesting" },
+  { german: "Das ist langweilig", english: "That's boring" },
+  { german: "Das ist teuer", english: "That's expensive" },
+  { german: "Das ist billig", english: "That's cheap" },
+  { german: "Der Bahnhof ist nah", english: "The station is near" },
+  { german: "Das Flughafen ist weit", english: "The airport is far" },
+  { german: "Ich bin der Meinung, dass...", english: "I am of the opinion that..." },
+  { german: "Es kommt darauf an", english: "It depends" },
+  { german: "Das ist mir egal", english: "I don't care" },
+  { german: "Kein Wunder!", english: "No wonder!" },
+  { german: "Lass mich nachdenken", english: "Let me think" },
+  { german: "Ich habe vergessen", english: "I forgot" },
+  { german: "Das stimmt", english: "That's correct" },
+  { german: "Das stimmt nicht", english: "That's not correct" },
+  { german: "Kann sein", english: "Maybe" },
+  { german: "Auf keinen Fall", english: "No way" },
+  { german: "Ich habe eine Frage", english: "I have a question" },
+  { german: "Die Antwort ist einfach", english: "The answer is simple" },
+  { german: "Bitte erklären Sie das", english: "Please explain that" },
+  { german: "Ich habe einen Fehler gemacht", english: "I made a mistake" },
+  { german: "Kein Problem, das passiert", english: "No problem, it happens" },
+  { german: "Herzlich willkommen!", english: "You're very welcome!" },
+  { german: "Schönen Tag noch!", english: "Have a nice day!" },
+  { german: "Gleichfalls!", english: "Likewise!" },
+  { german: "Endlich!", english: "Finally!" },
+  { german: "Genau!", english: "Exactly!" },
+  { german: "Quatsch!", english: "Nonsense!" },
+  { german: "Toll!", english: "Great!" },
+  { german: "Nicht schlecht", english: "Not bad" },
+  { german: "Es lohnt sich", english: "It's worth it" },
+  { german: "Lass uns das zusammen machen", english: "Let's do that together" },
+  { german: "Ich bin bereit", english: "I'm ready" },
+  { german: "Bist du bereit?", english: "Are you ready?" },
+  { german: "Fang an!", english: "Start!" },
+  { german: "Hör auf!", english: "Stop!" },
+  { german: "Mach weiter!", english: "Continue!" },
+  { german: "Ich bin neu hier", english: "I'm new here" },
+  { german: "Kannst du mich bitte anmelden?", english: "Can you please sign me up?" },
+  { german: "Wie funktioniert das?", english: "How does that work?" },
+  { german: "Ich brauche mehr Information", english: "I need more information" },
+  { german: "Das ist in Ordnung", english: "That's okay" },
+  { german: "Das ist nicht in Ordnung", english: "That's not okay" },
+  { german: "Wir schaffen das!", english: "We can do it!" }
 ];
 let chunks = [...chunksArray];
 
@@ -760,7 +847,7 @@ const GermanLearningJourney = () => {
           🇩🇪 German Journey
         </motion.h1>
         <p className="text-xl md:text-2xl mt-6 text-gray-700 max-w-2xl">
-          Scroll down & learn <span className="font-bold">alphabet, numbers, pronouns, question words, sentence structure, 182 chunks, 100 verbs, 354 nouns</span> — plus days, months, colors!
+          Scroll down & learn <span className="font-bold">alphabet, numbers, pronouns, question words, sentence structure, 268 chunks, 100 verbs, 354 nouns</span> — plus days, months, colors!
         </p>
         <p className="text-md mt-2 text-gray-600">🔊 Click speaker for pronunciation. 📖 Click book icon for full conjugation with pronunciation of each form.</p>
         <div className="mt-12 animate-bounce">👇</div>
@@ -963,7 +1050,7 @@ const GermanLearningJourney = () => {
       <div className="max-w-6xl mx-auto px-4 py-16">
         <ScrollReveal>
           <div className="bg-white/70 rounded-3xl p-8 shadow-2xl">
-            <h2 className="text-3xl font-bold text-center mb-2">💬 182 German Chunks</h2>
+            <h2 className="text-3xl font-bold text-center mb-2">💬 268 German Chunks</h2>
             <p className="text-center text-gray-600 mb-6">Speak naturally from day one – each phrase with English translation</p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[600px] overflow-y-auto p-2">
               {chunks.map((chunk, idx) => (

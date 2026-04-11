@@ -748,7 +748,7 @@ const GermanLearningJourney = () => {
     { letter: "J", name: "Yott" },
     { letter: "K", name: "Kah" },
     { letter: "L", name: "Ell" },
-    { letter: "M", name: "Emm" },
+    { letter: "M", name: "M" },
     { letter: "N", name: "Enn" },
     { letter: "O", name: "Oh" },
     { letter: "P", name: "Peh" },

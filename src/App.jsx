@@ -1,5 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { motion, useAnimation, useInView } from 'framer-motion';
+
 const speakGerman = (text) => {
   if (!window.speechSynthesis) {
     alert("Sorry, your browser does not support speech synthesis.");
@@ -129,6 +130,7 @@ const ConjugationModal = ({ verb, infinitive, english, onClose }) => {
   );
 };
 
+// ---------- DATA (unchanged) ----------
 const days = [
   { german: "Montag", english: "Monday" }, { german: "Dienstag", english: "Tuesday" },
   { german: "Mittwoch", english: "Wednesday" }, { german: "Donnerstag", english: "Thursday" },
@@ -268,7 +270,6 @@ const nounsRaw = [
 ];
 
 const additionalNouns = [
-  // Food & Drink (more)
   { article: "der", german: "Apfelsaft", english: "apple juice" },
   { article: "die", german: "Orange", english: "orange" },
   { article: "das", german: "Ei", english: "egg" },
@@ -290,13 +291,11 @@ const additionalNouns = [
   { article: "die", german: "Zwiebel", english: "onion" },
   { article: "der", german: "Knoblauch", english: "garlic" },
   { article: "der", german: "Apfelkuchen", english: "apple pie" },
-  { article: "die", german: "Schokolade", english: "chocolate" }, // already exists? fine
+  { article: "die", german: "Schokolade", english: "chocolate" },
   { article: "der", german: "Keks", english: "cookie" },
-  { article: "das", german: "Eis", english: "ice cream" }, // exists
-  { article: "der", german: "Honig", english: "honey" }, // exists
-  { article: "die", german: "Marmelade", english: "jam" }, // exists
-
-  // Clothing
+  { article: "das", german: "Eis", english: "ice cream" },
+  { article: "der", german: "Honig", english: "honey" },
+  { article: "die", german: "Marmelade", english: "jam" },
   { article: "das", german: "Hemd", english: "shirt" },
   { article: "die", german: "Hose", english: "pants" },
   { article: "das", german: "Kleid", english: "dress" },
@@ -312,13 +311,10 @@ const additionalNouns = [
   { article: "die", german: "Tasche", english: "bag" },
   { article: "der", german: "Rucksack", english: "backpack" },
   { article: "der", german: "Regenschirm", english: "umbrella" },
-
-  // Household & Furniture (more)
   { article: "der", german: "Schlüssel", english: "key" },
   { article: "die", german: "Türklingel", english: "doorbell" },
   { article: "das", german: "Regal", english: "shelf" },
   { article: "der", german: "Teppich", english: "carpet" },
-  { article: "die", german: "Lampe", english: "lamp" }, // exists
   { article: "das", german: "Bild", english: "picture" },
   { article: "der", german: "Spiegel", english: "mirror" },
   { article: "die", german: "Waschmaschine", english: "washing machine" },
@@ -333,8 +329,6 @@ const additionalNouns = [
   { article: "das", german: "Shampoo", english: "shampoo" },
   { article: "die", german: "Zahnbürste", english: "toothbrush" },
   { article: "die", german: "Zahnpasta", english: "toothpaste" },
-
-  // Work & School
   { article: "der", german: "Beruf", english: "profession" },
   { article: "die", german: "Arbeitsstelle", english: "job position" },
   { article: "der", german: "Kollege", english: "colleague (m)" },
@@ -343,7 +337,6 @@ const additionalNouns = [
   { article: "die", german: "Chefin", english: "boss (f)" },
   { article: "das", german: "Gehalt", english: "salary" },
   { article: "die", german: "Pause", english: "break" },
-  { article: "der", german: "Urlaub", english: "vacation" }, // exists
   { article: "die", german: "Klausur", english: "exam" },
   { article: "der", german: "Test", english: "test" },
   { article: "die", german: "Hausaufgabe", english: "homework" },
@@ -351,8 +344,6 @@ const additionalNouns = [
   { article: "die", german: "Universität", english: "university" },
   { article: "der", german: "Student", english: "student (m)" },
   { article: "die", german: "Studentin", english: "student (f)" },
-  { article: "der", german: "Lehrer", english: "teacher (m)" }, // exists
-  { article: "die", german: "Lehrerin", english: "teacher (f)" }, // exists
   { article: "das", german: "Klassenzimmer", english: "classroom" },
   { article: "die", german: "Tafel", english: "blackboard" },
   { article: "der", german: "Stift", english: "pen" },
@@ -362,29 +353,20 @@ const additionalNouns = [
   { article: "der", german: "Spitzer", english: "sharpener" },
   { article: "das", german: "Papier", english: "paper" },
   { article: "der", german: "Ordner", english: "folder" },
-
-  // Travel & Transport (more)
   { article: "der", german: "Flug", english: "flight" },
-  { article: "die", german: "Fahrkarte", english: "ticket" }, // ticket exists
   { article: "der", german: "Koffer", english: "suitcase" },
-  { article: "der", german: "Rucksack", english: "backpack" }, // repeat
   { article: "der", german: "Reisepass", english: "passport" },
   { article: "der", german: "Ausweis", english: "ID card" },
   { article: "das", german: "Hotel", english: "hotel" },
   { article: "die", german: "Jugendherberge", english: "youth hostel" },
   { article: "der", german: "Campingplatz", english: "campsite" },
   { article: "der", german: "Strand", english: "beach" },
-  { article: "der", german: "See", english: "lake" }, // exists
-  { article: "der", german: "Berg", english: "mountain" }, // exists
   { article: "der", german: "Wald", english: "forest" },
   { article: "die", german: "Brücke", english: "bridge" },
   { article: "der", german: "Tunnel", english: "tunnel" },
   { article: "die", german: "Ampel", english: "traffic light" },
   { article: "der", german: "Parkplatz", english: "parking lot" },
   { article: "die", german: "Tankstelle", english: "gas station" },
-
-  // Body & Health (more)
-  { article: "der", german: "Körper", english: "body" }, // exists
   { article: "die", german: "Schulter", english: "shoulder" },
   { article: "der", german: "Ellbogen", english: "elbow" },
   { article: "das", german: "Handgelenk", english: "wrist" },
@@ -404,22 +386,14 @@ const additionalNouns = [
   { article: "das", german: "Krankenhaus", english: "hospital" },
   { article: "der", german: "Krankenschwester", english: "nurse (f)" },
   { article: "der", german: "Krankenpfleger", english: "nurse (m)" },
-
-  // Nature & Weather (more)
   { article: "der", german: "Mond", english: "moon" },
   { article: "der", german: "Stern", english: "star" },
   { article: "die", german: "Erde", english: "earth" },
-  { article: "das", german: "Wasser", english: "water" }, // exists
   { article: "der", german: "Wind", english: "wind" },
   { article: "das", german: "Gewitter", english: "thunderstorm" },
   { article: "der", german: "Blitz", english: "lightning" },
   { article: "der", german: "Donner", english: "thunder" },
   { article: "der", german: "Nebel", english: "fog" },
-  { article: "das", german: "Eis", english: "ice" }, // exists
-  { article: "der", german: "Schnee", english: "snow" }, // exists
-  { article: "der", german: "Regen", english: "rain" }, // exists
-
-  // Abstract & Feelings
   { article: "die", german: "Freude", english: "joy" },
   { article: "der", german: "Schmerz", english: "pain" },
   { article: "die", german: "Trauer", english: "sorrow" },
@@ -431,14 +405,10 @@ const additionalNouns = [
   { article: "die", german: "Antwort", english: "answer" },
   { article: "die", german: "Frage", english: "question" },
   { article: "die", german: "Geschichte", english: "story/history" },
-  { article: "der", german: "Traum", english: "dream" }, // exists
   { article: "die", german: "Wirklichkeit", english: "reality" },
   { article: "die", german: "Möglichkeit", english: "possibility" },
   { article: "die", german: "Entscheidung", english: "decision" },
-
-  // Time & Calendar (more)
   { article: "der", german: "Tag", english: "day" },
-  { article: "die", german: "Nacht", english: "night" }, // exists
   { article: "die", german: "Stunde", english: "hour" },
   { article: "die", german: "Minute", english: "minute" },
   { article: "die", german: "Sekunde", english: "second" },
@@ -447,8 +417,6 @@ const additionalNouns = [
   { article: "die", german: "Uhrzeit", english: "time (clock time)" },
   { article: "der", german: "Anfang", english: "beginning" },
   { article: "das", german: "Ende", english: "end" },
-
-  // Family & People (more)
   { article: "der", german: "Vater", english: "father" },
   { article: "die", german: "Mutter", english: "mother" },
   { article: "der", german: "Sohn", english: "son" },
@@ -465,11 +433,8 @@ const additionalNouns = [
   { article: "die", german: "Nachbarin", english: "neighbor (f)" },
   { article: "der", german: "Bekannte", english: "acquaintance (m)" },
   { article: "die", german: "Bekannte", english: "acquaintance (f)" },
-
-  // Shopping & Money
   { article: "der", german: "Preis", english: "price" },
   { article: "die", german: "Rechnung", english: "bill" },
-  { article: "das", german: "Geld", english: "money" }, // exists
   { article: "die", german: "Kasse", english: "checkout" },
   { article: "der", german: "Einkaufswagen", english: "shopping cart" },
   { article: "die", german: "Tüte", english: "bag" },
@@ -477,19 +442,14 @@ const additionalNouns = [
   { article: "die", german: "Kreditkarte", english: "credit card" },
   { article: "das", german: "Bargeld", english: "cash" },
   { article: "der", german: "Rabatt", english: "discount" },
-
-  // Media & Technology
   { article: "das", german: "Internet", english: "internet" },
   { article: "die", german: "Website", english: "website" },
   { article: "die", german: "E-Mail", english: "email" },
   { article: "das", german: "Passwort", english: "password" },
   { article: "der", german: "Bildschirm", english: "screen" },
   { article: "die", german: "Tastatur", english: "keyboard" },
-  { article: "die", german: "Maus", english: "mouse" }, // exists
   { article: "der", german: "Drucker", english: "printer" },
   { article: "der", german: "Lautsprecher", english: "speaker" },
-  { article: "das", german: "Handy", english: "cellphone" }, // exists
-  { article: "der", german: "Fernseher", english: "TV" }, // exists
 ];
 let nouns = [...nounsRaw, ...additionalNouns];
 const chunksArray = [
@@ -584,8 +544,6 @@ const chunksArray = [
   { german: "Ich bin stolz auf dich", english: "I'm proud of you" }, { german: "Lass uns feiern", english: "Let's celebrate" },
   { german: "Das Leben ist schön", english: "Life is beautiful" }, { german: "Genieße den Moment", english: "Enjoy the moment" },
   { german: "Danke für alles", english: "Thanks for everything" }, { german: "Bis zum nächsten Mal!", english: "Until next time!" },
-
-  // ========== NEW A2-LEVEL CHUNKS ==========
   { german: "Ich habe gegessen", english: "I ate" },
   { german: "Wir sind nach Berlin gefahren", english: "We went to Berlin" },
   { german: "Hast du das gesehen?", english: "Did you see that?" },
@@ -675,7 +633,6 @@ const chunksArray = [
 ];
 let chunks = [...chunksArray];
 
-
 const ScrollReveal = ({ children }) => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
@@ -701,6 +658,151 @@ const GermanLearningJourney = () => {
   const [modalVerb, setModalVerb] = useState(null);
   const [modalEnglish, setModalEnglish] = useState("");
   const [modalInfinitive, setModalInfinitive] = useState("");
+  const [activeSection, setActiveSection] = useState("");
+
+  // Flashcard state
+  const [flashcardIndex, setFlashcardIndex] = useState(0);
+  const [isFlipped, setIsFlipped] = useState(false);
+
+  // Quiz states
+  const [verbQuiz, setVerbQuiz] = useState({ current: null, options: [], answered: false, score: 0, feedback: "" });
+  const [nounQuiz, setNounQuiz] = useState({ current: null, options: [], answered: false, score: 0, feedback: "" });
+  const [phraseQuiz, setPhraseQuiz] = useState({ current: null, options: [], answered: false, score: 0, feedback: "" });
+
+  // Build combined flashcard deck
+  const allFlashcards = useMemo(() => {
+    const nounCards = nouns.map(n => ({ front: `${n.article} ${n.german}`, back: n.english, type: 'noun' }));
+    const verbCards = verbs.map(v => ({ front: v.infinitive, back: v.english, type: 'verb' }));
+    const chunkCards = chunks.map(c => ({ front: c.german, back: c.english, type: 'chunk' }));
+    return [...nounCards, ...verbCards, ...chunkCards];
+  }, []);
+
+  const shuffleArray = (arr) => {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  };
+
+  const generateVerbQuestion = () => {
+    const correctVerb = verbs[Math.floor(Math.random() * verbs.length)];
+    const correctAnswer = correctVerb.english;
+    let otherMeanings = verbs.filter(v => v.infinitive !== correctVerb.infinitive).map(v => v.english);
+    otherMeanings = [...new Set(otherMeanings)];
+    let distractors = [];
+    while (distractors.length < 3 && otherMeanings.length) {
+      const rand = otherMeanings[Math.floor(Math.random() * otherMeanings.length)];
+      if (!distractors.includes(rand) && rand !== correctAnswer) {
+        distractors.push(rand);
+      }
+      if (otherMeanings.length < 3) break;
+    }
+    if (distractors.length < 3) distractors = ["to have", "to be", "to do"];
+    const options = shuffleArray([correctAnswer, ...distractors]);
+    return { question: correctVerb.infinitive, correct: correctAnswer, options };
+  };
+
+  const generateNounQuestion = () => {
+    const correctNoun = nouns[Math.floor(Math.random() * nouns.length)];
+    const correctAnswer = correctNoun.english;
+    let otherMeanings = nouns.filter(n => n.german !== correctNoun.german).map(n => n.english);
+    otherMeanings = [...new Set(otherMeanings)];
+    let distractors = [];
+    while (distractors.length < 3 && otherMeanings.length) {
+      const rand = otherMeanings[Math.floor(Math.random() * otherMeanings.length)];
+      if (!distractors.includes(rand) && rand !== correctAnswer) {
+        distractors.push(rand);
+      }
+      if (otherMeanings.length < 3) break;
+    }
+    if (distractors.length < 3) distractors = ["man", "woman", "child"];
+    const options = shuffleArray([correctAnswer, ...distractors]);
+    return { question: `${correctNoun.article} ${correctNoun.german}`, correct: correctAnswer, options };
+  };
+
+  const generatePhraseQuestion = () => {
+    const correctPhrase = chunks[Math.floor(Math.random() * chunks.length)];
+    const correctAnswer = correctPhrase.english;
+    let otherMeanings = chunks.filter(c => c.german !== correctPhrase.german).map(c => c.english);
+    otherMeanings = [...new Set(otherMeanings)];
+    let distractors = [];
+    while (distractors.length < 3 && otherMeanings.length) {
+      const rand = otherMeanings[Math.floor(Math.random() * otherMeanings.length)];
+      if (!distractors.includes(rand) && rand !== correctAnswer) {
+        distractors.push(rand);
+      }
+      if (otherMeanings.length < 3) break;
+    }
+    if (distractors.length < 3) distractors = ["Hello!", "Goodbye!", "Thank you"];
+    const options = shuffleArray([correctAnswer, ...distractors]);
+    return { question: correctPhrase.german, correct: correctAnswer, options };
+  };
+
+  useEffect(() => {
+    const vq = generateVerbQuestion();
+    setVerbQuiz(prev => ({ ...prev, current: vq, options: vq.options, answered: false, feedback: "" }));
+    const nq = generateNounQuestion();
+    setNounQuiz(prev => ({ ...prev, current: nq, options: nq.options, answered: false, feedback: "" }));
+    const pq = generatePhraseQuestion();
+    setPhraseQuiz(prev => ({ ...prev, current: pq, options: pq.options, answered: false, feedback: "" }));
+  }, []);
+
+  const handleVerbAnswer = (selected) => {
+    if (verbQuiz.answered) return;
+    const isCorrect = selected === verbQuiz.current.correct;
+    setVerbQuiz(prev => ({
+      ...prev,
+      answered: true,
+      score: prev.score + (isCorrect ? 1 : 0),
+      feedback: isCorrect ? "✅ Correct!" : `❌ Wrong! The correct answer is: ${prev.current.correct}`
+    }));
+  };
+  const nextVerbQuestion = () => {
+    const newQ = generateVerbQuestion();
+    setVerbQuiz(prev => ({ ...prev, current: newQ, options: newQ.options, answered: false, feedback: "" }));
+  };
+  const handleNounAnswer = (selected) => {
+    if (nounQuiz.answered) return;
+    const isCorrect = selected === nounQuiz.current.correct;
+    setNounQuiz(prev => ({
+      ...prev,
+      answered: true,
+      score: prev.score + (isCorrect ? 1 : 0),
+      feedback: isCorrect ? "✅ Correct!" : `❌ Wrong! The correct answer is: ${prev.current.correct}`
+    }));
+  };
+  const nextNounQuestion = () => {
+    const newQ = generateNounQuestion();
+    setNounQuiz(prev => ({ ...prev, current: newQ, options: newQ.options, answered: false, feedback: "" }));
+  };
+  const handlePhraseAnswer = (selected) => {
+    if (phraseQuiz.answered) return;
+    const isCorrect = selected === phraseQuiz.current.correct;
+    setPhraseQuiz(prev => ({
+      ...prev,
+      answered: true,
+      score: prev.score + (isCorrect ? 1 : 0),
+      feedback: isCorrect ? "✅ Correct!" : `❌ Wrong! The correct answer is: ${prev.current.correct}`
+    }));
+  };
+  const nextPhraseQuestion = () => {
+    const newQ = generatePhraseQuestion();
+    setPhraseQuiz(prev => ({ ...prev, current: newQ, options: newQ.options, answered: false, feedback: "" }));
+  };
+  const nextFlashcard = () => {
+    setFlashcardIndex((prev) => (prev + 1) % allFlashcards.length);
+    setIsFlipped(false);
+  };
+  const prevFlashcard = () => {
+    setFlashcardIndex((prev) => (prev - 1 + allFlashcards.length) % allFlashcards.length);
+    setIsFlipped(false);
+  };
+  const randomFlashcard = () => {
+    const randomIndex = Math.floor(Math.random() * allFlashcards.length);
+    setFlashcardIndex(randomIndex);
+    setIsFlipped(false);
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -713,6 +815,23 @@ const GermanLearningJourney = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Active section observer
+  useEffect(() => {
+    const sections = document.querySelectorAll("section[id]");
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        });
+      },
+      { threshold: 0.3, rootMargin: "-80px 0px -20% 0px" }
+    );
+    sections.forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
+  }, []);
+
   const openModal = (verb, infinitive, english) => {
     setModalVerb(verb);
     setModalInfinitive(infinitive);
@@ -720,6 +839,35 @@ const GermanLearningJourney = () => {
   };
   const closeModal = () => setModalVerb(null);
 
+  // Navigation links
+  const navLinks = [
+    { id: "flashcards", label: "📇 Flashcards" },
+    { id: "verb-quiz", label: "📝 Verb Quiz" },
+    { id: "noun-quiz", label: "🏷️ Noun Quiz" },
+    { id: "phrase-quiz", label: "💬 Phrase Quiz" },
+    { id: "numbers", label: "🔢 Numbers" },
+    { id: "alphabet", label: "🔤 Alphabet" },
+    { id: "pronouns", label: "👤 Pronouns" },
+    { id: "sentence-structure", label: "📝 Structure" },
+    { id: "verbs", label: "⚡ Verbs" },
+    { id: "nouns", label: "🏷️ Nouns" },
+    { id: "chunks", label: "💬 Chunks" },
+    { id: "cases", label: "📚 Cases" },
+    { id: "prepositions", label: "📍 Prepositions" },
+    { id: "separable", label: "✂️ Separable" },
+    { id: "particles", label: "✨ Particles" },
+    { id: "comparatives", label: "📈 Comparatives" },
+    { id: "past", label: "⏳ Past Tense" },
+  ];
+
+  const scrollToSection = (id) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  // Data for remaining sections
   const personalPronouns = [
     { german: "ich", english: "I" }, { german: "du", english: "you (informal singular)" },
     { german: "er", english: "he" }, { german: "sie", english: "she" },
@@ -736,36 +884,16 @@ const GermanLearningJourney = () => {
   ];
 
   const alphabet = [
-    { letter: "A", name: "Ah" },
-    { letter: "B", name: "Beh" },
-    { letter: "C", name: "Tseh" },
-    { letter: "D", name: "Deh" },
-    { letter: "E", name: "Eh" },
-    { letter: "F", name: "Eff" },
-    { letter: "G", name: "Geh" },
-    { letter: "H", name: "Hah" },
-    { letter: "I", name: "Ee" },
-    { letter: "J", name: "Yott" },
-    { letter: "K", name: "Kah" },
-    { letter: "L", name: "Ell" },
-    { letter: "M", name: "M" },
-    { letter: "N", name: "Enn" },
-    { letter: "O", name: "Oh" },
-    { letter: "P", name: "Peh" },
-    { letter: "Q", name: "Kuh" },
-    { letter: "R", name: "Err" },
-    { letter: "S", name: "Ess" },
-    { letter: "T", name: "Teh" },
-    { letter: "U", name: "Uuh" },
-    { letter: "V", name: "Fau" },
-    { letter: "W", name: "Veh" },
-    { letter: "X", name: "Iks" },
-    { letter: "Y", name: "Ypsilon" },
-    { letter: "Z", name: "Tsett" },
-    { letter: "Ä", name: "Ae" },
-    { letter: "Ö", name: "Oe" },
-    { letter: "Ü", name: "Ue" },
-    { letter: "ß", name: "Eszett" }
+    { letter: "A", name: "Ah" }, { letter: "B", name: "Beh" }, { letter: "C", name: "Tseh" },
+    { letter: "D", name: "Deh" }, { letter: "E", name: "Eh" }, { letter: "F", name: "Eff" },
+    { letter: "G", name: "Geh" }, { letter: "H", name: "Hah" }, { letter: "I", name: "Ee" },
+    { letter: "J", name: "Yott" }, { letter: "K", name: "Kah" }, { letter: "L", name: "Ell" },
+    { letter: "M", name: "M" }, { letter: "N", name: "Enn" }, { letter: "O", name: "Oh" },
+    { letter: "P", name: "Peh" }, { letter: "Q", name: "Kuh" }, { letter: "R", name: "Err" },
+    { letter: "S", name: "Ess" }, { letter: "T", name: "Teh" }, { letter: "U", name: "Uuh" },
+    { letter: "V", name: "Fau" }, { letter: "W", name: "Veh" }, { letter: "X", name: "Iks" },
+    { letter: "Y", name: "Ypsilon" }, { letter: "Z", name: "Tsett" }, { letter: "Ä", name: "Ae" },
+    { letter: "Ö", name: "Oe" }, { letter: "Ü", name: "Ue" }, { letter: "ß", name: "Eszett" }
   ];
 
   const casesData = [
@@ -775,17 +903,17 @@ const GermanLearningJourney = () => {
       example: { german: "Der Hund schläft.", english: "The dog sleeps." }
     },
     {
-      name: "Accusative", usage: "direct object (who/what receives the action) – used after certain verbs & prepositions",
+      name: "Accusative", usage: "direct object (who/what receives the action)",
       articles: { der: "den", die: "die", das: "das", plural: "die" },
       example: { german: "Ich sehe den Hund.", english: "I see the dog." }
     },
     {
-      name: "Dative", usage: "indirect object (to/for whom) – used after certain verbs & prepositions",
+      name: "Dative", usage: "indirect object (to/for whom)",
       articles: { der: "dem", die: "der", das: "dem", plural: "den" },
       example: { german: "Ich gebe dem Hund einen Knochen.", english: "I give the dog a bone." }
     },
     {
-      name: "Genitive", usage: "possession (whose) – often replaced by 'von' + Dative in spoken German",
+      name: "Genitive", usage: "possession (whose)",
       articles: { der: "des", die: "der", das: "des", plural: "der" },
       example: { german: "Das ist das Haus des Mannes.", english: "That is the man's house." }
     }
@@ -827,461 +955,601 @@ const GermanLearningJourney = () => {
     { verb: "essen", präteritum: "aß", perfekt: "habe gegessen", meaning: "to eat", example: "Sie aß einen Apfel. / Sie hat einen Apfel gegessen." }
   ];
 
-  return (
-    <div className="bg-gradient-to-b from-indigo-50 via-purple-50 to-pink-50 font-sans">
-      <div className="fixed top-0 left-0 w-full h-2 bg-gray-200 z-50">
-        <div className="h-full bg-gradient-to-r from-green-400 to-blue-500 transition-all duration-200" style={{ width: `${scrollProgress}%` }}></div>
-      </div>
+ return (
+  <div className="bg-gradient-to-b from-indigo-50 via-purple-50 to-pink-50 font-sans">
+    {/* Scroll progress bar */}
+    <div className="fixed top-0 left-0 w-full h-2 bg-gray-200 z-50">
+      <div className="h-full bg-gradient-to-r from-green-400 to-blue-500 transition-all duration-200" style={{ width: `${scrollProgress}%` }}></div>
+    </div>
 
-      {modalVerb && (
-        <ConjugationModal
-          verb={modalVerb}
-          infinitive={modalInfinitive}
-          english={modalEnglish}
-          onClose={closeModal}
-        />
-      )}
+    {/* Sticky Navigation Bar */}
+    <nav className="sticky top-2 z-40 bg-white/80 backdrop-blur-md rounded-full shadow-lg mx-4 my-2 p-2 overflow-x-auto whitespace-nowrap scrollbar-hide">
+      <ul className="flex gap-2 px-2">
+        {navLinks.map(link => (
+          <li key={link.id}>
+            <button
+              onClick={() => scrollToSection(link.id)}
+              className={`px-3 py-1.5 rounded-full text-sm font-medium transition ${
+                activeSection === link.id
+                  ? "bg-purple-600 text-white shadow-md"
+                  : "bg-gray-200 text-gray-700 hover:bg-purple-100"
+              }`}
+            >
+              {link.label}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </nav>
 
-      <section className="min-h-screen flex flex-col justify-center items-center text-center px-4 py-20">
-        <motion.h1 className="text-5xl md:text-7xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-pink-600">
-          🇩🇪 German Journey
-        </motion.h1>
-        <p className="text-xl md:text-2xl mt-6 text-gray-700 max-w-2xl">
-          Scroll down & learn <span className="font-bold">alphabet, numbers, pronouns, question words, sentence structure, 268 chunks, 100 verbs, 354 nouns</span> — plus days, months, colors!
-        </p>
-        <p className="text-md mt-2 text-gray-600">🔊 Click speaker for pronunciation. 📖 Click book icon for full conjugation with pronunciation of each form.</p>
-        <div className="mt-12 animate-bounce">👇</div>
-      </section>
+    {modalVerb && (
+      <ConjugationModal
+        verb={modalVerb}
+        infinitive={modalInfinitive}
+        english={modalEnglish}
+        onClose={closeModal}
+      />
+    )}
 
-      <div className="max-w-6xl mx-auto px-4 py-16">
-        <ScrollReveal>
-          <div className="bg-white/70 rounded-3xl p-8 shadow-2xl">
-            <h2 className="text-3xl font-bold text-center mb-2">🔢 German Numbers</h2>
-            <p className="text-center text-gray-600 mb-6">Count from zero to one hundred and beyond</p>
-            <div className="grid md:grid-cols-2 gap-8">
-              <div>
-                <h3 className="text-xl font-semibold text-blue-700 mb-3">0–20</h3>
-                <div className="grid grid-cols-2 gap-2">
-                  {numbersBasic.map(num => (
-                    <div key={num.german} className="bg-white p-2 rounded-xl shadow flex items-center justify-between">
-                      <span><span className="font-bold">{num.german}</span> – {num.english}</span>
-                      <PronounceButton word={num.german} />
-                    </div>
+    {/* Hero Section */}
+    <section className="min-h-screen flex flex-col justify-center items-center text-center px-4 py-20">
+      <motion.h1 className="text-5xl md:text-7xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-pink-600">
+        🇩🇪 German Journey
+      </motion.h1>
+      <p className="text-xl md:text-2xl mt-6 text-gray-700 max-w-2xl">
+        Scroll down & learn <span className="font-bold">alphabet, numbers, pronouns, sentence structure, {chunks.length} chunks, {verbs.length} verbs, {nouns.length} nouns</span> — plus days, months, colors!
+      </p>
+      <p className="text-md mt-2 text-gray-600">🔊 Click speaker for pronunciation. 📖 Click book icon for full conjugation.</p>
+      <div className="mt-12 animate-bounce">👇</div>
+    </section>
+
+    {/* Flashcards Section */}
+    <section id="flashcards" className="max-w-6xl mx-auto px-4 py-16 scroll-mt-24">
+      <ScrollReveal>
+        <div className="bg-white/70 rounded-3xl p-8 shadow-2xl">
+          <h2 className="text-3xl font-bold text-center mb-2">📇 Interactive Flashcards</h2>
+          <p className="text-center text-gray-600 mb-6">Tap to flip • {allFlashcards.length} cards (nouns, verbs, phrases)</p>
+          <div className="flex flex-col items-center">
+            <div className="w-full max-w-md h-80 bg-gradient-to-br from-purple-100 to-indigo-100 rounded-2xl shadow-xl flex flex-col justify-center items-center p-6 cursor-pointer transition-transform hover:scale-105" onClick={() => setIsFlipped(!isFlipped)}>
+              <div className="text-center">
+                {!isFlipped ? (
+                  <>
+                    <p className="text-sm text-purple-600 mb-2">🇩🇪 German</p>
+                    <p className="text-2xl font-bold text-gray-800">{allFlashcards[flashcardIndex]?.front}</p>
+                    <PronounceButton word={allFlashcards[flashcardIndex]?.front} />
+                  </>
+                ) : (
+                  <>
+                    <p className="text-sm text-green-600 mb-2">🇬🇧 English</p>
+                    <p className="text-2xl font-bold text-gray-800">{allFlashcards[flashcardIndex]?.back}</p>
+                  </>
+                )}
+              </div>
+            </div>
+            <div className="flex gap-4 mt-6">
+              <button onClick={prevFlashcard} className="bg-purple-500 text-white px-4 py-2 rounded-full shadow hover:bg-purple-600 transition">◀ Previous</button>
+              <button onClick={randomFlashcard} className="bg-gray-500 text-white px-4 py-2 rounded-full shadow hover:bg-gray-600 transition">🎲 Random</button>
+              <button onClick={nextFlashcard} className="bg-purple-500 text-white px-4 py-2 rounded-full shadow hover:bg-purple-600 transition">Next ▶</button>
+            </div>
+            <p className="text-sm text-gray-500 mt-4">Card {flashcardIndex+1} of {allFlashcards.length}</p>
+            <p className="text-xs text-gray-400 mt-2">💡 Tip: Click on the card to flip and reveal the English translation.</p>
+          </div>
+        </div>
+      </ScrollReveal>
+    </section>
+
+    {/* Verb Quiz Section */}
+    <section id="verb-quiz" className="max-w-6xl mx-auto px-4 py-16 scroll-mt-24">
+      <ScrollReveal>
+        <div className="bg-white/70 rounded-3xl p-8 shadow-2xl">
+          <h2 className="text-3xl font-bold text-center mb-2">📝 Verb Quiz</h2>
+          <p className="text-center text-gray-600 mb-6">What is the English meaning of the German verb?</p>
+          {verbQuiz.current && (
+            <div className="max-w-lg mx-auto">
+              <div className="bg-white rounded-xl p-6 shadow text-center">
+                <div className="flex items-center justify-center gap-2">
+                  <p className="text-2xl font-bold text-purple-700">{verbQuiz.current.question}</p>
+                  <PronounceButton word={verbQuiz.current.question} />
+                </div>
+                <div className="grid grid-cols-1 gap-3 mt-6">
+                  {verbQuiz.options.map((opt, idx) => (
+                    <button key={idx} onClick={() => handleVerbAnswer(opt)} disabled={verbQuiz.answered} className="bg-gray-100 hover:bg-purple-100 p-3 rounded-xl transition">{opt}</button>
                   ))}
                 </div>
+                {verbQuiz.feedback && (
+                  <div className="mt-4 p-2 rounded bg-gray-100">
+                    <p className="font-semibold">{verbQuiz.feedback}</p>
+                    <p className="text-sm text-gray-600">Score: {verbQuiz.score}</p>
+                  </div>
+                )}
+                <button onClick={nextVerbQuestion} className="mt-6 bg-green-500 text-white px-6 py-2 rounded-full shadow hover:bg-green-600 transition">Next Question →</button>
               </div>
-              <div>
-                <h3 className="text-xl font-semibold text-blue-700 mb-3">Tens & 100</h3>
-                <div className="grid grid-cols-2 gap-2">
-                  {tens.map(num => (
-                    <div key={num.german} className="bg-white p-2 rounded-xl shadow flex items-center justify-between">
-                      <span><span className="font-bold">{num.german}</span> – {num.english}</span>
-                      <PronounceButton word={num.german} />
-                    </div>
+            </div>
+          )}
+        </div>
+      </ScrollReveal>
+    </section>
+
+    {/* Noun Quiz Section */}
+    <section id="noun-quiz" className="max-w-6xl mx-auto px-4 py-16 scroll-mt-24">
+      <ScrollReveal>
+        <div className="bg-white/70 rounded-3xl p-8 shadow-2xl">
+          <h2 className="text-3xl font-bold text-center mb-2">🏷️ Noun Quiz</h2>
+          <p className="text-center text-gray-600 mb-6">What is the English meaning of the German noun (with article)?</p>
+          {nounQuiz.current && (
+            <div className="max-w-lg mx-auto">
+              <div className="bg-white rounded-xl p-6 shadow text-center">
+                <div className="flex items-center justify-center gap-2">
+                  <p className="text-2xl font-bold text-purple-700">{nounQuiz.current.question}</p>
+                  <PronounceButton word={nounQuiz.current.question} />
+                </div>
+                <div className="grid grid-cols-1 gap-3 mt-6">
+                  {nounQuiz.options.map((opt, idx) => (
+                    <button key={idx} onClick={() => handleNounAnswer(opt)} disabled={nounQuiz.answered} className="bg-gray-100 hover:bg-purple-100 p-3 rounded-xl transition">{opt}</button>
                   ))}
                 </div>
-                <div className="mt-4 p-3 bg-blue-50 rounded-xl">
-                  <p className="text-sm font-semibold">📌 How to form numbers 21–99:</p>
-                  <p className="text-sm">"einundzwanzig" = eins + und + zwanzig (one‑and‑twenty)</p>
-                  <p className="text-sm">"fünfundvierzig" = fünf + und + vierzig</p>
-                  <p className="text-sm">"hundert" = 100, "tausend" = 1000</p>
-                </div>
+                {nounQuiz.feedback && (
+                  <div className="mt-4 p-2 rounded bg-gray-100">
+                    <p className="font-semibold">{nounQuiz.feedback}</p>
+                    <p className="text-sm text-gray-600">Score: {nounQuiz.score}</p>
+                  </div>
+                )}
+                <button onClick={nextNounQuestion} className="mt-6 bg-green-500 text-white px-6 py-2 rounded-full shadow hover:bg-green-600 transition">Next Question →</button>
               </div>
             </div>
-            <div className="text-center mt-4 text-sm font-semibold text-green-700">✅ Numbers from 0 to 100+ mastered!</div>
-          </div>
-        </ScrollReveal>
-      </div>
+          )}
+        </div>
+      </ScrollReveal>
+    </section>
 
-      <div className="max-w-6xl mx-auto px-4 py-16">
-        <ScrollReveal>
-          <div className="bg-white/70 rounded-3xl p-8 shadow-2xl">
-            <h2 className="text-3xl font-bold text-center mb-2">🔤 German Alphabet (Letters with Pronunciation)</h2>
-            <p className="text-center text-gray-600 mb-6">Learn the names of each letter – click the speaker to hear the correct pronunciation</p>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
-              {alphabet.map((letterObj) => (
-                <div key={letterObj.letter} className="bg-white p-3 rounded-xl shadow flex items-center justify-between hover:bg-gray-50 transition">
-                  <div>
-                    <span className="text-xl font-bold text-purple-700">{letterObj.letter}</span>
-                    <span className="text-gray-500 text-sm ml-2">– {letterObj.name}</span>
-                  </div>
-                  <PronounceButton word={letterObj.name} />
+    {/* Phrase Quiz Section */}
+    <section id="phrase-quiz" className="max-w-6xl mx-auto px-4 py-16 scroll-mt-24">
+      <ScrollReveal>
+        <div className="bg-white/70 rounded-3xl p-8 shadow-2xl">
+          <h2 className="text-3xl font-bold text-center mb-2">💬 Phrase Quiz</h2>
+          <p className="text-center text-gray-600 mb-6">What is the English translation of the German phrase?</p>
+          {phraseQuiz.current && (
+            <div className="max-w-lg mx-auto">
+              <div className="bg-white rounded-xl p-6 shadow text-center">
+                <div className="flex items-center justify-center gap-2">
+                  <p className="text-2xl font-bold text-purple-700">{phraseQuiz.current.question}</p>
+                  <PronounceButton word={phraseQuiz.current.question} />
                 </div>
-              ))}
-            </div>
-            <div className="text-center mt-6 text-sm font-semibold text-green-700">✅ 30 letters including Umlauts (Ä, Ö, Ü) and Eszett (ß) – practice pronunciation daily!</div>
-          </div>
-        </ScrollReveal>
-      </div>
-
-      <div className="max-w-6xl mx-auto px-4 py-16">
-        <ScrollReveal>
-          <div className="bg-white/70 rounded-3xl p-8 shadow-2xl">
-            <h2 className="text-3xl font-bold text-center mb-2">👤 Personal Pronouns & ❓ Question Words</h2>
-            <p className="text-center text-gray-600 mb-6">The building blocks of every sentence</p>
-            <div className="grid md:grid-cols-2 gap-8">
-              <div>
-                <h3 className="text-xl font-semibold text-purple-700 mb-3">Personal Pronouns (Subjekt)</h3>
-                <div className="grid grid-cols-2 gap-2">
-                  {personalPronouns.map(pron => (
-                    <div key={pron.german} className="bg-white p-2 rounded-xl shadow flex items-center justify-between">
-                      <span><span className="font-bold">{pron.german}</span> – {pron.english}</span>
-                      <PronounceButton word={pron.german} />
-                    </div>
+                <div className="grid grid-cols-1 gap-3 mt-6">
+                  {phraseQuiz.options.map((opt, idx) => (
+                    <button key={idx} onClick={() => handlePhraseAnswer(opt)} disabled={phraseQuiz.answered} className="bg-gray-100 hover:bg-purple-100 p-3 rounded-xl transition">{opt}</button>
                   ))}
                 </div>
-                <div className="mt-3 text-sm text-gray-600">Note: "Sie" (capital S) = formal you; "sie" (lowercase) = she or they.</div>
-              </div>
-              <div>
-                <h3 className="text-xl font-semibold text-purple-700 mb-3">Fundamental Question Words</h3>
-                <div className="grid grid-cols-2 gap-2">
-                  {questionWords.map(qw => (
-                    <div key={qw.german} className="bg-white p-2 rounded-xl shadow flex items-center justify-between">
-                      <span><span className="font-bold">{qw.german}</span> – {qw.english}</span>
-                      <PronounceButton word={qw.german.split('/')[0]} />
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-3 text-sm text-gray-600">Use these to form open questions. The verb follows immediately.</div>
+                {phraseQuiz.feedback && (
+                  <div className="mt-4 p-2 rounded bg-gray-100">
+                    <p className="font-semibold">{phraseQuiz.feedback}</p>
+                    <p className="text-sm text-gray-600">Score: {phraseQuiz.score}</p>
+                  </div>
+                )}
+                <button onClick={nextPhraseQuestion} className="mt-6 bg-green-500 text-white px-6 py-2 rounded-full shadow hover:bg-green-600 transition">Next Question →</button>
               </div>
             </div>
-          </div>
-        </ScrollReveal>
-      </div>
+          )}
+        </div>
+      </ScrollReveal>
+    </section>
 
-      <div className="max-w-6xl mx-auto px-4 py-16">
-        <ScrollReveal>
-          <div className="bg-white/70 rounded-3xl p-8 shadow-2xl">
-            <h2 className="text-3xl font-bold text-center mb-2">📝 German Sentence Structure</h2>
-            <p className="text-center text-gray-600 mb-6">How to build correct sentences – with English translations</p>
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="bg-white p-4 rounded-xl">
-                <h3 className="text-xl font-bold text-purple-700">1. Main Clause (Aussagesatz)</h3>
-                <p className="mt-2"><span className="font-mono">SUBJECT + VERB + REST</span></p>
-                <div className="mt-3 space-y-2">
-                  <div className="bg-gray-100 p-2 rounded">Ich <strong>lerne</strong> Deutsch. → <em>I learn German.</em></div>
-                  <div className="bg-gray-100 p-2 rounded">Er <strong>kommt</strong> morgen. → <em>He comes tomorrow.</em></div>
-                  <div className="bg-gray-100 p-2 rounded">Wir <strong>wohnen</strong> in Berlin. → <em>We live in Berlin.</em></div>
-                </div>
-                <h3 className="text-xl font-bold text-purple-700 mt-4">2. Yes/No Question (Entscheidungsfrage)</h3>
-                <p className="mt-2"><span className="font-mono">VERB + SUBJECT + REST ?</span></p>
-                <div className="mt-2 space-y-2">
-                  <div className="bg-gray-100 p-2 rounded"><strong>Lernst</strong> du Deutsch? → <em>Do you learn German?</em></div>
-                  <div className="bg-gray-100 p-2 rounded"><strong>Kommt</strong> er morgen? → <em>Does he come tomorrow?</em></div>
-                </div>
-              </div>
-              <div className="bg-white p-4 rounded-xl">
-                <h3 className="text-xl font-bold text-purple-700">3. W‑Questions (W-Fragen)</h3>
-                <p className="mt-2"><span className="font-mono">QUESTION WORD + VERB + SUBJECT + REST ?</span></p>
-                <div className="mt-3 space-y-2">
-                  <div className="bg-gray-100 p-2 rounded"><strong>Wo</strong> wohnst du? → <em>Where do you live?</em></div>
-                  <div className="bg-gray-100 p-2 rounded"><strong>Was</strong> machst du? → <em>What are you doing?</em></div>
-                  <div className="bg-gray-100 p-2 rounded"><strong>Warum</strong> lernst du Deutsch? → <em>Why are you learning German?</em></div>
-                  <div className="bg-gray-100 p-2 rounded"><strong>Wie</strong> heißt du? → <em>What's your name? (lit. How are you called?)</em></div>
-                </div>
-                <h3 className="text-xl font-bold text-purple-700 mt-4">4. Modal Verbs (können, müssen, etc.)</h3>
-                <p><span className="font-mono">MODAL + SUBJECT + ... + MAIN VERB (at end)</span></p>
-                <div className="mt-2 space-y-2">
-                  <div className="bg-gray-100 p-2 rounded">Ich <strong>kann</strong> gut Deutsch <strong>sprechen</strong>. → <em>I can speak German well.</em></div>
-                  <div className="bg-gray-100 p-2 rounded">Du <strong>musst</strong> jetzt <strong>gehen</strong>. → <em>You must go now.</em></div>
-                  <div className="bg-gray-100 p-2 rounded">Wir <strong>wollen</strong> ein Auto <strong>kaufen</strong>. → <em>We want to buy a car.</em></div>
-                </div>
+    {/* Numbers Section */}
+    <section id="numbers" className="max-w-6xl mx-auto px-4 py-16 scroll-mt-24">
+      <ScrollReveal>
+        <div className="bg-white/70 rounded-3xl p-8 shadow-2xl">
+          <h2 className="text-3xl font-bold text-center mb-2">🔢 German Numbers</h2>
+          <p className="text-center text-gray-600 mb-6">Count from zero to one hundred and beyond</p>
+          <div className="grid md:grid-cols-2 gap-8">
+            <div>
+              <h3 className="text-xl font-semibold text-blue-700 mb-3">0–20</h3>
+              <div className="grid grid-cols-2 gap-2">
+                {numbersBasic.map(num => (
+                  <div key={num.german} className="bg-white p-2 rounded-xl shadow flex items-center justify-between">
+                    <span><span className="font-bold">{num.german}</span> – {num.english}</span>
+                    <PronounceButton word={num.german} />
+                  </div>
+                ))}
               </div>
             </div>
-            <div className="mt-6 p-4 bg-yellow-50 rounded-xl text-center">
-              <p className="font-semibold">✨ Key rule: The conjugated verb is ALWAYS in second position in main clauses.</p>
-              <p className="text-sm mt-1">Practice with the chunks, verbs, and pronouns above – build your own sentences!</p>
-            </div>
-          </div>
-        </ScrollReveal>
-      </div>
-
-      <div className="max-w-6xl mx-auto px-4 py-16">
-        <ScrollReveal>
-          <div className="bg-white/70 rounded-3xl p-8 shadow-2xl">
-            <h2 className="text-3xl font-bold text-center mb-2">⚡ 100 Essential Verbs</h2>
-            <p className="text-center text-gray-600 mb-6">Click 📖 to see full conjugation and hear every form</p>
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3">
-              {verbs.map((verb, idx) => (
-                <div key={idx} className="bg-gradient-to-r from-blue-50 to-indigo-50 p-2 rounded-xl hover:scale-105 transition flex items-center justify-between">
-                  <div>
-                    <span className="font-mono font-bold text-indigo-800">{verb.infinitive}</span>
-                    <span className="text-xs text-gray-500 block">({verb.english})</span>
+            <div>
+              <h3 className="text-xl font-semibold text-blue-700 mb-3">Tens & 100</h3>
+              <div className="grid grid-cols-2 gap-2">
+                {tens.map(num => (
+                  <div key={num.german} className="bg-white p-2 rounded-xl shadow flex items-center justify-between">
+                    <span><span className="font-bold">{num.german}</span> – {num.english}</span>
+                    <PronounceButton word={num.german} />
                   </div>
-                  <div className="flex gap-1">
-                    <PronounceButton word={verb.infinitive} />
-                    <button
-                      onClick={() => openModal(verb.infinitive, verb.infinitive, verb.english)}
-                      className="text-gray-500 hover:text-purple-600 transition text-lg"
-                      title="Show conjugation"
-                    >
-                      📖
-                    </button>
+                ))}
+              </div>
+              <div className="mt-4 p-3 bg-blue-50 rounded-xl">
+                <p className="text-sm font-semibold">📌 How to form numbers 21–99:</p>
+                <p className="text-sm">"einundzwanzig" = eins + und + zwanzig (one‑and‑twenty)</p>
+                <p className="text-sm">"fünfundvierzig" = fünf + und + vierzig</p>
+                <p className="text-sm">"hundert" = 100, "tausend" = 1000</p>
+              </div>
+            </div>
+          </div>
+          <div className="text-center mt-4 text-sm font-semibold text-green-700">✅ Numbers from 0 to 100+ mastered!</div>
+        </div>
+      </ScrollReveal>
+    </section>
+
+    {/* Alphabet Section */}
+    <section id="alphabet" className="max-w-6xl mx-auto px-4 py-16 scroll-mt-24">
+      <ScrollReveal>
+        <div className="bg-white/70 rounded-3xl p-8 shadow-2xl">
+          <h2 className="text-3xl font-bold text-center mb-2">🔤 German Alphabet</h2>
+          <p className="text-center text-gray-600 mb-6">Learn the names of each letter – click the speaker to hear the correct pronunciation</p>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+            {alphabet.map((letterObj) => (
+              <div key={letterObj.letter} className="bg-white p-3 rounded-xl shadow flex items-center justify-between hover:bg-gray-50 transition">
+                <div>
+                  <span className="text-xl font-bold text-purple-700">{letterObj.letter}</span>
+                  <span className="text-gray-500 text-sm ml-2">– {letterObj.name}</span>
+                </div>
+                <PronounceButton word={letterObj.name} />
+              </div>
+            ))}
+          </div>
+          <div className="text-center mt-6 text-sm font-semibold text-green-700">✅ 30 letters including Umlauts (Ä, Ö, Ü) and Eszett (ß)</div>
+        </div>
+      </ScrollReveal>
+    </section>
+
+    {/* Pronouns & Question Words */}
+    <section id="pronouns" className="max-w-6xl mx-auto px-4 py-16 scroll-mt-24">
+      <ScrollReveal>
+        <div className="bg-white/70 rounded-3xl p-8 shadow-2xl">
+          <h2 className="text-3xl font-bold text-center mb-2">👤 Personal Pronouns & ❓ Question Words</h2>
+          <p className="text-center text-gray-600 mb-6">The building blocks of every sentence</p>
+          <div className="grid md:grid-cols-2 gap-8">
+            <div>
+              <h3 className="text-xl font-semibold text-purple-700 mb-3">Personal Pronouns (Subjekt)</h3>
+              <div className="grid grid-cols-2 gap-2">
+                {personalPronouns.map((pron, idx) => (
+                  <div key={idx} className="bg-white p-2 rounded-xl shadow flex items-center justify-between">
+                    <span><span className="font-bold">{pron.german}</span> – {pron.english}</span>
+                    <PronounceButton word={pron.german} />
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
+              <div className="mt-3 text-sm text-gray-600">Note: "Sie" (capital S) = formal you; "sie" (lowercase) = she or they.</div>
             </div>
-            <div className="text-center mt-6 text-sm font-semibold text-green-700">✅ {verbs.length} verbs – click the book to see and hear each conjugated form.</div>
-          </div>
-        </ScrollReveal>
-      </div>
-
-      <div className="max-w-6xl mx-auto px-4 py-16">
-        <ScrollReveal>
-          <div className="bg-white/70 rounded-3xl p-8 shadow-2xl">
-            <h2 className="text-3xl font-bold text-center mb-2">🏷️ 354 Nouns (with Articles)</h2>
-            <p className="text-center text-gray-600 mb-6">der, die, das – master the gender</p>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 max-h-[600px] overflow-y-auto p-2">
-              {nouns.map((noun, idx) => (
-                <div key={idx} className={`p-2 rounded-xl shadow-sm border-l-8 flex items-center justify-between ${noun.article === 'der' ? 'border-blue-400 bg-blue-50' : noun.article === 'die' ? 'border-pink-400 bg-pink-50' : 'border-green-400 bg-green-50'}`}>
-                  <div>
-                    <span className="font-bold">{noun.article} {noun.german}</span>
-                    <span className="text-gray-500 text-sm ml-2">– {noun.english}</span>
+            <div>
+              <h3 className="text-xl font-semibold text-purple-700 mb-3">Fundamental Question Words</h3>
+              <div className="grid grid-cols-2 gap-2">
+                {questionWords.map((qw, idx) => (
+                  <div key={idx} className="bg-white p-2 rounded-xl shadow flex items-center justify-between">
+                    <span><span className="font-bold">{qw.german}</span> – {qw.english}</span>
+                    <PronounceButton word={qw.german.split('/')[0]} />
                   </div>
-                  <PronounceButton word={noun.german} />
-                </div>
-              ))}
-            </div>
-            <div className="text-center mt-6 text-sm font-semibold text-green-700">✅ Total nouns: {nouns.length} (with correct articles)</div>
-          </div>
-        </ScrollReveal>
-      </div>
-
-      <div className="max-w-6xl mx-auto px-4 py-16">
-        <ScrollReveal>
-          <div className="bg-white/70 rounded-3xl p-8 shadow-2xl">
-            <h2 className="text-3xl font-bold text-center mb-2">💬 268 German Chunks</h2>
-            <p className="text-center text-gray-600 mb-6">Speak naturally from day one – each phrase with English translation</p>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[600px] overflow-y-auto p-2">
-              {chunks.map((chunk, idx) => (
-                <div key={idx} className="bg-amber-50 p-2 rounded-xl shadow flex items-center justify-between hover:bg-amber-100">
-                  <div>
-                    <span className="font-medium">{chunk.german}</span>
-                    <span className="text-gray-500 text-sm ml-2">– {chunk.english}</span>
-                  </div>
-                  <PronounceButton word={chunk.german} />
-                </div>
-              ))}
-            </div>
-            <div className="text-center mt-6 text-sm font-semibold text-green-700">✅ {chunks.length} practical chunks + English meanings!</div>
-          </div>
-        </ScrollReveal>
-      </div>
-
-
-      <div className="max-w-6xl mx-auto px-4 py-16">
-        <ScrollReveal>
-          <div className="bg-white/70 rounded-3xl p-8 shadow-2xl">
-            <h2 className="text-3xl font-bold text-center mb-2">📚 Grammar Deep‑Dive: The Four Cases</h2>
-            <p className="text-center text-gray-600 mb-6">Nominative • Accusative • Dative • Genitive – with article tables and examples</p>
-            <div className="grid md:grid-cols-2 gap-8">
-              {casesData.map(c => (
-                <div key={c.name} className="bg-white rounded-xl p-4 shadow">
-                  <h3 className="text-xl font-bold text-purple-700">{c.name}</h3>
-                  <p className="text-sm text-gray-600 mt-1">{c.usage}</p>
-                  <table className="w-full mt-3 text-sm border-collapse">
-                    <thead>
-                      <tr className="border-b">
-                        <th className="text-left">Gender</th><th>Article</th>
-                       </tr>
-                    </thead>
-                    <tbody>
-                      <tr><td>der (masc)</td><td>{c.articles.der}</td></tr>
-                      <tr><td>die (fem)</td><td>{c.articles.die}</td></tr>
-                      <tr><td>das (neut)</td><td>{c.articles.das}</td></tr>
-                      <tr><td>plural</td><td>{c.articles.plural}</td></tr>
-                    </tbody>
-                  </table>
-                  <div className="mt-3 bg-gray-100 p-2 rounded flex justify-between items-center">
-                    <span><strong>📖 Example:</strong> {c.example.german} – <em>{c.example.english}</em></span>
-                    <PronounceButton word={c.example.german.split(' ')[0]} />
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="mt-6 p-3 bg-blue-50 rounded-xl text-sm">
-              💡 <strong>Tip:</strong> The genitive is often replaced by "von" + dative in everyday speech, e.g. "das Haus von dem Mann" instead of "das Haus des Mannes".
+                ))}
+              </div>
+              <div className="mt-3 text-sm text-gray-600">Use these to form open questions. The verb follows immediately.</div>
             </div>
           </div>
-        </ScrollReveal>
-      </div>
+        </div>
+      </ScrollReveal>
+    </section>
 
-      <div className="max-w-6xl mx-auto px-4 py-16">
-        <ScrollReveal>
-          <div className="bg-white/70 rounded-3xl p-8 shadow-2xl">
-            <h2 className="text-3xl font-bold text-center mb-2">📍 Prepositions & Their Cases</h2>
-            <p className="text-center text-gray-600 mb-6">Always learn a preposition together with the case it triggers</p>
-            <div className="grid md:grid-cols-3 gap-6">
-              {prepositions.map(p => (
-                <div key={p.case} className="bg-white rounded-xl p-4">
-                  <h3 className="text-lg font-bold text-center p-2 rounded bg-purple-100">{p.case}</h3>
-                  <ul className="mt-3 space-y-1 list-disc list-inside">
-                    {p.preps.map(prep => (
-                      <li key={prep}>{prep}</li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
+    {/* Sentence Structure */}
+    <section id="sentence-structure" className="max-w-6xl mx-auto px-4 py-16 scroll-mt-24">
+      <ScrollReveal>
+        <div className="bg-white/70 rounded-3xl p-8 shadow-2xl">
+          <h2 className="text-3xl font-bold text-center mb-2">📝 German Sentence Structure</h2>
+          <p className="text-center text-gray-600 mb-6">How to build correct sentences – with English translations</p>
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="bg-white p-4 rounded-xl">
+              <h3 className="text-xl font-bold text-purple-700">1. Main Clause (Aussagesatz)</h3>
+              <p className="mt-2"><span className="font-mono">SUBJECT + VERB + REST</span></p>
+              <div className="mt-3 space-y-2">
+                <div className="bg-gray-100 p-2 rounded">Ich <strong>lerne</strong> Deutsch. → <em>I learn German.</em></div>
+                <div className="bg-gray-100 p-2 rounded">Er <strong>kommt</strong> morgen. → <em>He comes tomorrow.</em></div>
+                <div className="bg-gray-100 p-2 rounded">Wir <strong>wohnen</strong> in Berlin. → <em>We live in Berlin.</em></div>
+              </div>
+              <h3 className="text-xl font-bold text-purple-700 mt-4">2. Yes/No Question (Entscheidungsfrage)</h3>
+              <p className="mt-2"><span className="font-mono">VERB + SUBJECT + REST ?</span></p>
+              <div className="mt-2 space-y-2">
+                <div className="bg-gray-100 p-2 rounded"><strong>Lernst</strong> du Deutsch? → <em>Do you learn German?</em></div>
+                <div className="bg-gray-100 p-2 rounded"><strong>Kommt</strong> er morgen? → <em>Does he come tomorrow?</em></div>
+              </div>
             </div>
-            <div className="mt-6 p-3 bg-yellow-50 rounded-xl text-sm">
-              🔁 <strong>Two‑way prepositions</strong>: use accusative for movement/direction, dative for location. Example: <em>„Ich lege das Buch <strong>auf den Tisch</strong>.“</em> (acc, movement) vs. <em>„Das Buch liegt <strong>auf dem Tisch</strong>.“</em> (dat, position)
+            <div className="bg-white p-4 rounded-xl">
+              <h3 className="text-xl font-bold text-purple-700">3. W‑Questions (W-Fragen)</h3>
+              <p className="mt-2"><span className="font-mono">QUESTION WORD + VERB + SUBJECT + REST ?</span></p>
+              <div className="mt-3 space-y-2">
+                <div className="bg-gray-100 p-2 rounded"><strong>Wo</strong> wohnst du? → <em>Where do you live?</em></div>
+                <div className="bg-gray-100 p-2 rounded"><strong>Was</strong> machst du? → <em>What are you doing?</em></div>
+                <div className="bg-gray-100 p-2 rounded"><strong>Warum</strong> lernst du Deutsch? → <em>Why are you learning German?</em></div>
+                <div className="bg-gray-100 p-2 rounded"><strong>Wie</strong> heißt du? → <em>What's your name?</em></div>
+              </div>
+              <h3 className="text-xl font-bold text-purple-700 mt-4">4. Modal Verbs</h3>
+              <p><span className="font-mono">MODAL + SUBJECT + ... + MAIN VERB (at end)</span></p>
+              <div className="mt-2 space-y-2">
+                <div className="bg-gray-100 p-2 rounded">Ich <strong>kann</strong> gut Deutsch <strong>sprechen</strong>. → <em>I can speak German well.</em></div>
+                <div className="bg-gray-100 p-2 rounded">Du <strong>musst</strong> jetzt <strong>gehen</strong>. → <em>You must go now.</em></div>
+                <div className="bg-gray-100 p-2 rounded">Wir <strong>wollen</strong> ein Auto <strong>kaufen</strong>. → <em>We want to buy a car.</em></div>
+              </div>
             </div>
           </div>
-        </ScrollReveal>
-      </div>
-
-      <div className="max-w-6xl mx-auto px-4 py-16">
-        <ScrollReveal>
-          <div className="bg-white/70 rounded-3xl p-8 shadow-2xl">
-            <h2 className="text-3xl font-bold text-center mb-2">✂️ Separable Verbs (trennbare Verben)</h2>
-            <p className="text-center text-gray-600 mb-6">The prefix moves to the end in main clauses</p>
-            <div className="grid md:grid-cols-2 gap-4">
-              {separableVerbs.map(v => (
-                <div key={v.infinitive} className="bg-white p-3 rounded-xl shadow flex justify-between items-center">
-                  <div>
-                    <span className="font-mono font-bold text-indigo-800">{v.infinitive}</span>
-                    <span className="text-gray-600 text-sm ml-2">({v.meaning})</span>
-                    <div className="text-sm text-gray-700 mt-1">🔹 <em>{v.example}</em></div>
-                    <div className="text-xs text-gray-500">→ Infinitive: {v.infinitive} | Conjugated: prefix at end</div>
-                  </div>
-                  <PronounceButton word={v.infinitive} />
-                </div>
-              ))}
-            </div>
-            <div className="mt-4 p-3 bg-green-50 rounded-xl text-sm">
-              📌 Rule: In present tense, the prefix is separated and placed at the end of the clause.<br />
-              <em>„Ich <strong>stehe</strong> früh <strong>auf</strong>.“</em> (I get up early.)
-            </div>
+          <div className="mt-6 p-4 bg-yellow-50 rounded-xl text-center">
+            <p className="font-semibold">✨ Key rule: The conjugated verb is ALWAYS in second position in main clauses.</p>
           </div>
-        </ScrollReveal>
-      </div>
+        </div>
+      </ScrollReveal>
+    </section>
 
-      <div className="max-w-6xl mx-auto px-4 py-16">
-        <ScrollReveal>
-          <div className="bg-white/70 rounded-3xl p-8 shadow-2xl">
-            <h2 className="text-3xl font-bold text-center mb-2">✨ Modal Particles – Add Natural Flavour</h2>
-            <p className="text-center text-gray-600 mb-6">Small words that convey emotion, attitude, or emphasis (hard to translate directly)</p>
-            <div className="grid md:grid-cols-2 gap-4">
-              {modalParticles.map(p => (
-                <div key={p.particle} className="bg-white p-3 rounded-xl shadow flex justify-between items-start">
-                  <div>
-                    <span className="font-bold text-lg text-purple-700">{p.particle}</span>
-                    <p className="text-sm text-gray-600">{p.usage}</p>
-                    <p className="text-sm mt-1">📖 <em>{p.example}</em></p>
-                  </div>
-                  <PronounceButton word={p.particle} />
+    {/* Verbs List */}
+    <section id="verbs" className="max-w-6xl mx-auto px-4 py-16 scroll-mt-24">
+      <ScrollReveal>
+        <div className="bg-white/70 rounded-3xl p-8 shadow-2xl">
+          <h2 className="text-3xl font-bold text-center mb-2">⚡ 100 Essential Verbs</h2>
+          <p className="text-center text-gray-600 mb-6">Click 📖 to see full conjugation and hear every form</p>
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3">
+            {verbs.map((verb, idx) => (
+              <div key={idx} className="bg-gradient-to-r from-blue-50 to-indigo-50 p-2 rounded-xl hover:scale-105 transition flex items-center justify-between">
+                <div>
+                  <span className="font-mono font-bold text-indigo-800">{verb.infinitive}</span>
+                  <span className="text-xs text-gray-500 block">({verb.english})</span>
                 </div>
-              ))}
-            </div>
-            <div className="mt-4 text-center text-sm text-gray-700">
-              💬 <strong>Note:</strong> Overusing particles sounds unnatural – listen to native speakers to get a feel.
-            </div>
+                <div className="flex gap-1">
+                  <PronounceButton word={verb.infinitive} />
+                  <button onClick={() => openModal(verb.infinitive, verb.infinitive, verb.english)} className="text-gray-500 hover:text-purple-600 transition text-lg" title="Show conjugation">📖</button>
+                </div>
+              </div>
+            ))}
           </div>
-        </ScrollReveal>
-      </div>
+          <div className="text-center mt-6 text-sm font-semibold text-green-700">✅ {verbs.length} verbs – click the book to see and hear each conjugated form.</div>
+        </div>
+      </ScrollReveal>
+    </section>
 
-      <div className="max-w-6xl mx-auto px-4 py-16">
-        <ScrollReveal>
-          <div className="bg-white/70 rounded-3xl p-8 shadow-2xl">
-            <h2 className="text-3xl font-bold text-center mb-2">📈 Comparative & Superlative</h2>
-            <p className="text-center text-gray-600 mb-6">How to say "bigger", "the biggest" etc.</p>
-            <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse bg-white rounded-xl">
-                <thead>
-                  <tr className="bg-gray-200">
-                    <th className="p-2">Positive</th><th>Comparative (+er)</th><th>Superlative (am ...sten)</th><th>Meaning</th><th>Pronounce</th>
-                   </tr>
-                </thead>
+    {/* Nouns List */}
+    <section id="nouns" className="max-w-6xl mx-auto px-4 py-16 scroll-mt-24">
+      <ScrollReveal>
+        <div className="bg-white/70 rounded-3xl p-8 shadow-2xl">
+          <h2 className="text-3xl font-bold text-center mb-2">🏷️ {nouns.length} Nouns (with Articles)</h2>
+          <p className="text-center text-gray-600 mb-6">der, die, das – master the gender</p>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 max-h-[600px] overflow-y-auto p-2">
+            {nouns.map((noun, idx) => (
+              <div key={idx} className={`p-2 rounded-xl shadow-sm border-l-8 flex items-center justify-between ${noun.article === 'der' ? 'border-blue-400 bg-blue-50' : noun.article === 'die' ? 'border-pink-400 bg-pink-50' : 'border-green-400 bg-green-50'}`}>
+                <div>
+                  <span className="font-bold">{noun.article} {noun.german}</span>
+                  <span className="text-gray-500 text-sm ml-2">– {noun.english}</span>
+                </div>
+                <PronounceButton word={`${noun.article} ${noun.german}`} />
+              </div>
+            ))}
+          </div>
+          <div className="text-center mt-6 text-sm font-semibold text-green-700">✅ Total nouns: {nouns.length}</div>
+        </div>
+      </ScrollReveal>
+    </section>
+
+    {/* Chunks */}
+    <section id="chunks" className="max-w-6xl mx-auto px-4 py-16 scroll-mt-24">
+      <ScrollReveal>
+        <div className="bg-white/70 rounded-3xl p-8 shadow-2xl">
+          <h2 className="text-3xl font-bold text-center mb-2">💬 {chunks.length} German Chunks</h2>
+          <p className="text-center text-gray-600 mb-6">Speak naturally from day one – each phrase with English translation</p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[600px] overflow-y-auto p-2">
+            {chunks.map((chunk, idx) => (
+              <div key={idx} className="bg-amber-50 p-2 rounded-xl shadow flex items-center justify-between hover:bg-amber-100">
+                <div>
+                  <span className="font-medium">{chunk.german}</span>
+                  <span className="text-gray-500 text-sm ml-2">– {chunk.english}</span>
+                </div>
+                <PronounceButton word={chunk.german} />
+              </div>
+            ))}
+          </div>
+          <div className="text-center mt-6 text-sm font-semibold text-green-700">✅ {chunks.length} practical chunks + English meanings!</div>
+        </div>
+      </ScrollReveal>
+    </section>
+
+    {/* Cases */}
+    <section id="cases" className="max-w-6xl mx-auto px-4 py-16 scroll-mt-24">
+      <ScrollReveal>
+        <div className="bg-white/70 rounded-3xl p-8 shadow-2xl">
+          <h2 className="text-3xl font-bold text-center mb-2">📚 Grammar Deep‑Dive: The Four Cases</h2>
+          <p className="text-center text-gray-600 mb-6">Nominative • Accusative • Dative • Genitive</p>
+          <div className="grid md:grid-cols-2 gap-8">
+            {casesData.map(c => (
+              <div key={c.name} className="bg-white rounded-xl p-4 shadow">
+                <h3 className="text-xl font-bold text-purple-700">{c.name}</h3>
+                <p className="text-sm text-gray-600 mt-1">{c.usage}</p>
+                <table className="w-full mt-3 text-sm border-collapse">
+                  <thead><tr className="border-b"><th className="text-left">Gender</th><th>Article</th></tr></thead>
+                  <tbody>
+                    <tr><td className="py-1">der (masc)</td><td>{c.articles.der}</td></tr>
+                    <tr><td className="py-1">die (fem)</td><td>{c.articles.die}</td></tr>
+                    <tr><td className="py-1">das (neut)</td><td>{c.articles.das}</td></tr>
+                    <tr><td className="py-1">plural</td><td>{c.articles.plural}</td></tr>
+                  </tbody>
+                </table>
+                <div className="mt-3 bg-gray-100 p-2 rounded flex justify-between items-center">
+                  <span><strong>📖 Example:</strong> {c.example.german} – <em>{c.example.english}</em></span>
+                  <PronounceButton word={c.example.german.split(' ')[0]} />
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="mt-6 p-3 bg-blue-50 rounded-xl text-sm">
+            💡 <strong>Tip:</strong> The genitive is often replaced by "von" + dative in everyday speech.
+          </div>
+        </div>
+      </ScrollReveal>
+    </section>
+
+    {/* Prepositions */}
+    <section id="prepositions" className="max-w-6xl mx-auto px-4 py-16 scroll-mt-24">
+      <ScrollReveal>
+        <div className="bg-white/70 rounded-3xl p-8 shadow-2xl">
+          <h2 className="text-3xl font-bold text-center mb-2">📍 Prepositions & Their Cases</h2>
+          <p className="text-center text-gray-600 mb-6">Always learn a preposition together with the case it triggers</p>
+          <div className="grid md:grid-cols-3 gap-6">
+            {prepositions.map(p => (
+              <div key={p.case} className="bg-white rounded-xl p-4">
+                <h3 className="text-lg font-bold text-center p-2 rounded bg-purple-100">{p.case}</h3>
+                <ul className="mt-3 space-y-1 list-disc list-inside">
+                  {p.preps.map(prep => <li key={prep}>{prep}</li>)}
+                </ul>
+              </div>
+            ))}
+          </div>
+          <div className="mt-6 p-3 bg-yellow-50 rounded-xl text-sm">
+            🔁 <strong>Two‑way prepositions</strong>: accusative for movement, dative for location.
+          </div>
+        </div>
+      </ScrollReveal>
+    </section>
+
+    {/* Separable Verbs */}
+    <section id="separable" className="max-w-6xl mx-auto px-4 py-16 scroll-mt-24">
+      <ScrollReveal>
+        <div className="bg-white/70 rounded-3xl p-8 shadow-2xl">
+          <h2 className="text-3xl font-bold text-center mb-2">✂️ Separable Verbs (trennbare Verben)</h2>
+          <p className="text-center text-gray-600 mb-6">The prefix moves to the end in main clauses</p>
+          <div className="grid md:grid-cols-2 gap-4">
+            {separableVerbs.map(v => (
+              <div key={v.infinitive} className="bg-white p-3 rounded-xl shadow flex justify-between items-center">
+                <div>
+                  <span className="font-mono font-bold text-indigo-800">{v.infinitive}</span>
+                  <span className="text-gray-600 text-sm ml-2">({v.meaning})</span>
+                  <div className="text-sm text-gray-700 mt-1">🔹 <em>{v.example}</em></div>
+                  <div className="text-xs text-gray-500">→ Infinitive: {v.infinitive} | Conjugated: prefix at end</div>
+                </div>
+                <PronounceButton word={v.infinitive} />
+              </div>
+            ))}
+          </div>
+          <div className="mt-4 p-3 bg-green-50 rounded-xl text-sm">
+            📌 Rule: In present tense, the prefix is separated and placed at the end of the clause.<br />
+            <em>„Ich <strong>stehe</strong> früh <strong>auf</strong>.“</em> (I get up early.)
+          </div>
+        </div>
+      </ScrollReveal>
+    </section>
+
+    {/* Modal Particles */}
+    <section id="particles" className="max-w-6xl mx-auto px-4 py-16 scroll-mt-24">
+      <ScrollReveal>
+        <div className="bg-white/70 rounded-3xl p-8 shadow-2xl">
+          <h2 className="text-3xl font-bold text-center mb-2">✨ Modal Particles – Add Natural Flavour</h2>
+          <p className="text-center text-gray-600 mb-6">Small words that convey emotion, attitude, or emphasis</p>
+          <div className="grid md:grid-cols-2 gap-4">
+            {modalParticles.map(p => (
+              <div key={p.particle} className="bg-white p-3 rounded-xl shadow flex justify-between items-start">
+                <div>
+                  <span className="font-bold text-lg text-purple-700">{p.particle}</span>
+                  <p className="text-sm text-gray-600">{p.usage}</p>
+                  <p className="text-sm mt-1">📖 <em>{p.example}</em></p>
+                </div>
+                <PronounceButton word={p.particle} />
+              </div>
+            ))}
+          </div>
+        </div>
+      </ScrollReveal>
+    </section>
+
+    {/* Comparatives */}
+    <section id="comparatives" className="max-w-6xl mx-auto px-4 py-16 scroll-mt-24">
+      <ScrollReveal>
+        <div className="bg-white/70 rounded-3xl p-8 shadow-2xl">
+          <h2 className="text-3xl font-bold text-center mb-2">📈 Comparative & Superlative</h2>
+          <p className="text-center text-gray-600 mb-6">How to say "bigger", "the biggest" etc.</p>
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse bg-white rounded-xl">
+              <thead><tr className="bg-gray-200"><th className="p-2">Positive</th><th>Comparative</th><th>Superlative</th><th>Meaning</th><th>Pronounce</th></tr></thead>
+              <tbody>
+                {adjComparatives.map(adj => (
+                  <tr key={adj.positive} className="border-b">
+                    <td className="p-2">{adj.positive}</td>
+                    <td className="p-2">{adj.comparative}</td>
+                    <td className="p-2">{adj.superlative}</td>
+                    <td className="p-2">{adj.meaning}</td>
+                    <td className="p-2"><PronounceButton word={adj.comparative} /></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div className="mt-4 p-3 bg-gray-100 rounded-xl text-sm">
+            📝 Examples: <em>„Mein Hund ist <strong>größer</strong> als deiner.“</em><br />
+            <em>„Das Auto ist <strong>am schnellsten</strong>.“</em>
+          </div>
+        </div>
+      </ScrollReveal>
+    </section>
+
+    {/* Past Tense */}
+    <section id="past" className="max-w-6xl mx-auto px-4 py-16 scroll-mt-24">
+      <ScrollReveal>
+        <div className="bg-white/70 rounded-3xl p-8 shadow-2xl">
+          <h2 className="text-3xl font-bold text-center mb-2">⏳ Past Tense: Präteritum & Perfekt</h2>
+          <p className="text-center text-gray-600 mb-6">How to talk about the past – two common forms</p>
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="bg-white p-4 rounded-xl">
+              <h3 className="text-xl font-bold text-purple-700">Präteritum (simple past)</h3>
+              <p className="text-sm">Used mainly in writing and for modal/auxiliary verbs in speech.</p>
+              <table className="w-full mt-2 text-sm">
+                <thead><tr><th>Verb</th><th>Präteritum</th><th>Meaning</th></tr></thead>
                 <tbody>
-                  {adjComparatives.map(adj => (
-                    <tr key={adj.positive} className="border-b">
-                      <td className="p-2">{adj.positive}</td>
-                      <td>{adj.comparative}</td>
-                      <td>{adj.superlative}</td>
-                      <td>{adj.meaning}</td>
-                      <td><PronounceButton word={adj.comparative} /></td>
-                    </tr>
-                  ))}
+                  {pastExamples.map(v => <tr key={v.verb}><td>{v.verb}</td><td>{v.präteritum}</td><td>{v.meaning}</td></tr>)}
                 </tbody>
               </table>
             </div>
-            <div className="mt-4 p-3 bg-gray-100 rounded-xl text-sm">
-              📝 Examples: <em>„Mein Hund ist <strong>größer</strong> als deiner.“</em> (My dog is bigger than yours.)<br />
-              <em>„Das Auto ist <strong>am schnellsten</strong>.“</em> (The car is the fastest.)
+            <div className="bg-white p-4 rounded-xl">
+              <h3 className="text-xl font-bold text-purple-700">Perfekt (present perfect)</h3>
+              <p className="text-sm">Most common spoken past tense: haben/sein + past participle.</p>
+              <table className="w-full mt-2 text-sm">
+                <thead><tr><th>Verb</th><th>Perfekt</th><th>Meaning</th></tr></thead>
+                <tbody>
+                  {pastExamples.map(v => <tr key={v.verb}><td>{v.verb}</td><td>{v.perfekt}</td><td>{v.meaning}</td></tr>)}
+                </tbody>
+              </table>
             </div>
           </div>
-        </ScrollReveal>
-      </div>
-
-
-      <div className="max-w-6xl mx-auto px-4 py-16">
-        <ScrollReveal>
-          <div className="bg-white/70 rounded-3xl p-8 shadow-2xl">
-            <h2 className="text-3xl font-bold text-center mb-2">⏳ Past Tense: Präteritum & Perfekt</h2>
-            <p className="text-center text-gray-600 mb-6">How to talk about the past – two common forms</p>
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="bg-white p-4 rounded-xl">
-                <h3 className="text-xl font-bold text-purple-700">Präteritum (simple past)</h3>
-                <p className="text-sm">Used mainly in writing and for modal/auxiliary verbs in speech.</p>
-                <table className="w-full mt-2 text-sm">
-                  <thead><tr><th>Verb</th><th>Präteritum</th><th>Meaning</th></tr></thead>
-                  <tbody>
-                    {pastExamples.map(v => (
-                      <tr key={v.verb}><td>{v.verb}</td><td>{v.präteritum}</td><td>{v.meaning}</td></tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-              <div className="bg-white p-4 rounded-xl">
-                <h3 className="text-xl font-bold text-purple-700">Perfekt (present perfect)</h3>
-                <p className="text-sm">Most common spoken past tense: haben/sein + past participle.</p>
-                <table className="w-full mt-2 text-sm">
-                  <thead><tr><th>Verb</th><th>Perfekt</th><th>Meaning</th></tr></thead>
-                  <tbody>
-                    {pastExamples.map(v => (
-                      <tr key={v.verb}><td>{v.verb}</td><td>{v.perfekt}</td><td>{v.meaning}</td></tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+          <div className="mt-4 space-y-2">
+            <div className="bg-gray-100 p-2 rounded flex justify-between items-center">
+              <span><strong>Präteritum:</strong> <em>„Gestern <strong>ging</strong> ich ins Kino.“</em> – Yesterday I went to the cinema.</span>
+              <PronounceButton word="ging" />
             </div>
-            <div className="mt-4 space-y-2">
-              <div className="bg-gray-100 p-2 rounded flex justify-between items-center">
-                <span><strong>Example sentence (Präteritum):</strong> <em>„Gestern <strong>ging</strong> ich ins Kino.“</em> – Yesterday I went to the cinema.</span>
-                <PronounceButton word="ging" />
-              </div>
-              <div className="bg-gray-100 p-2 rounded flex justify-between items-center">
-                <span><strong>Example sentence (Perfekt):</strong> <em>„Ich <strong>bin gestern ins Kino gegangen</strong>.“</em> – I went to the cinema yesterday.</span>
-                <PronounceButton word="bin gegangen" />
-              </div>
-            </div>
-            <div className="mt-4 text-center text-sm font-semibold text-green-700">
-              ✅ Most verbs form Perfekt with „haben“; verbs of movement/change of state use „sein“.
+            <div className="bg-gray-100 p-2 rounded flex justify-between items-center">
+              <span><strong>Perfekt:</strong> <em>„Ich <strong>bin gestern ins Kino gegangen</strong>.“</em></span>
+              <PronounceButton word="bin gegangen" />
             </div>
           </div>
-        </ScrollReveal>
-      </div>
-
-
-      <section className="py-20 text-center">
-        <motion.div 
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="bg-gradient-to-r from-yellow-300 to-orange-400 rounded-3xl p-10 max-w-4xl mx-auto shadow-2xl"
-        >
-          <h2 className="text-4xl font-bold text-white">🎉 Herzlichen Glückwunsch! 🎉</h2>
-          <p className="text-xl text-white mt-4">You've completed the German learning journey!</p>
-          <div className="mt-6 text-white text-lg">
-            <p>📚 You learned: <strong>Alphabet, Numbers, Pronouns, Sentence Structure, Cases, Prepositions, Separable Verbs, Modal Particles, Comparatives, Past Tenses, 100 verbs, 354 nouns, 182 chunks</strong> + more!</p>
-            <p className="mt-2">✨ Keep practicing and you'll be fluent in no time! ✨</p>
+          <div className="mt-4 text-center text-sm font-semibold text-green-700">
+            ✅ Most verbs form Perfekt with „haben“; verbs of movement/change of state use „sein“.
           </div>
-          <button onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})} className="mt-8 bg-white text-orange-600 px-6 py-3 rounded-full font-bold shadow-lg hover:scale-105 transition">⬆️ Start Over</button>
-        </motion.div>
-      </section>
-    </div>
-  );
+        </div>
+      </ScrollReveal>
+    </section>
+
+    {/* Final Celebration */}
+    <section className="py-20 text-center">
+      <motion.div 
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        viewport={{ once: true }}
+        className="bg-gradient-to-r from-yellow-300 to-orange-400 rounded-3xl p-10 max-w-4xl mx-auto shadow-2xl"
+      >
+        <h2 className="text-4xl font-bold text-white">🎉 Herzlichen Glückwunsch! 🎉</h2>
+        <p className="text-xl text-white mt-4">You've completed the German learning journey!</p>
+        <div className="mt-6 text-white text-lg">
+          <p>📚 You learned: <strong>Alphabet, Numbers, Pronouns, Sentence Structure, Cases, Prepositions, Separable Verbs, Modal Particles, Comparatives, Past Tenses, {verbs.length} verbs, {nouns.length} nouns, {chunks.length} chunks</strong> + more!</p>
+          <p className="mt-2">✨ Keep practicing and you'll be fluent in no time! ✨</p>
+        </div>
+        <button onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})} className="mt-8 bg-white text-orange-600 px-6 py-3 rounded-full font-bold shadow-lg hover:scale-105 transition">⬆️ Start Over</button>
+      </motion.div>
+    </section>
+  </div>
+);
 };
 
 export default GermanLearningJourney;

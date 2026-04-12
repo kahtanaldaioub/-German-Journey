@@ -1020,7 +1020,7 @@ const GermanLearningJourney = () => {
                   </>
                 ) : (
                   <>
-                    <p className="text-sm text-green-600 mb-2">🇬🇧 English</p>
+                    <p className="text-sm text-green-600 mb-2">English</p>
                     <p className="text-2xl font-bold text-gray-800">{allFlashcards[flashcardIndex]?.back}</p>
                   </>
                 )}

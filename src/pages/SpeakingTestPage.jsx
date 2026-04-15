@@ -50,13 +50,14 @@ const SpeakingTestPage = () => {
   const [feedback, setFeedback] = useState('');
   const [recognitionSupported, setRecognitionSupported] = useState(true);
   const [errorMsg, setErrorMsg] = useState('');
-  const [micTestResult, setMicTestResult] = useState(null);
+  const [micPermission, setMicPermission] = useState(null);
   const [audioLevel, setAudioLevel] = useState(0);
   
   const recognitionRef = useRef(null);
   const mediaStreamRef = useRef(null);
   const audioContextRef = useRef(null);
   const sourceRef = useRef(null);
+  const analyserRef = useRef(null);
   const animationFrameRef = useRef(null);
   
   useEffect(() => {
@@ -72,53 +73,42 @@ const SpeakingTestPage = () => {
     };
   }, []);
   
-  const startAudioLevelMeter = (stream) => {
-    const AudioContext = window.AudioContext || window.webkitAudioContext;
-    audioContextRef.current = new AudioContext();
-    sourceRef.current = audioContextRef.current.createMediaStreamSource(stream);
-    const analyser = audioContextRef.current.createAnalyser();
-    analyser.fftSize = 256;
-    sourceRef.current.connect(analyser);
-    const dataArray = new Uint8Array(analyser.frequencyBinCount);
-    
-    const updateLevel = () => {
-      if (!isRecording && !mediaStreamRef.current) return;
-      analyser.getByteFrequencyData(dataArray);
-      let sum = 0;
-      for (let i = 0; i < dataArray.length; i++) sum += dataArray[i];
-      let avg = sum / dataArray.length;
-      let level = Math.min(100, (avg / 255) * 100);
-      setAudioLevel(level);
-      animationFrameRef.current = requestAnimationFrame(updateLevel);
-    };
-    audioContextRef.current.resume();
-    updateLevel();
-  };
-  
-  const testMicrophone = async () => {
-    setMicTestResult(null);
-    setErrorMsg('');
+  // Request microphone permission on user gesture
+  const requestMicPermission = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      startAudioLevelMeter(stream);
+      // Keep stream open for level meter
       mediaStreamRef.current = stream;
-      // Show level for 2 seconds then stop
-      setTimeout(() => {
-        if (mediaStreamRef.current) {
-          mediaStreamRef.current.getTracks().forEach(track => track.stop());
-          mediaStreamRef.current = null;
-        }
-        if (audioContextRef.current) {
-          audioContextRef.current.close();
-          audioContextRef.current = null;
-        }
-        cancelAnimationFrame(animationFrameRef.current);
-        setAudioLevel(0);
-      }, 2000);
-      setMicTestResult('✅ Microphone is working! You can now record.');
+      setMicPermission(true);
+      setErrorMsg('');
+      
+      // Setup audio level meter
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      audioContextRef.current = new AudioContext();
+      sourceRef.current = audioContextRef.current.createMediaStreamSource(stream);
+      analyserRef.current = audioContextRef.current.createAnalyser();
+      analyserRef.current.fftSize = 256;
+      sourceRef.current.connect(analyserRef.current);
+      const dataArray = new Uint8Array(analyserRef.current.frequencyBinCount);
+      
+      const updateLevel = () => {
+        if (!analyserRef.current) return;
+        analyserRef.current.getByteFrequencyData(dataArray);
+        let sum = 0;
+        for (let i = 0; i < dataArray.length; i++) sum += dataArray[i];
+        let avg = sum / dataArray.length;
+        let level = Math.min(100, (avg / 255) * 100);
+        setAudioLevel(level);
+        animationFrameRef.current = requestAnimationFrame(updateLevel);
+      };
+      
+      await audioContextRef.current.resume();
+      updateLevel();
+      
     } catch (err) {
-      setMicTestResult('❌ Cannot access microphone. Please allow microphone access.');
-      setErrorMsg('Microphone permission denied or no mic found.');
+      console.error(err);
+      setMicPermission(false);
+      setErrorMsg('Microphone access denied. Please allow microphone in your browser settings.');
     }
   };
   
@@ -127,14 +117,13 @@ const SpeakingTestPage = () => {
     setRecordedText('');
     setFeedback('');
     setErrorMsg('');
-    setAudioLevel(0);
+    
+    // Ensure we have mic permission and audio context is running
+    if (!mediaStreamRef.current || !audioContextRef.current) {
+      await requestMicPermission();
+    }
     
     try {
-      // Get persistent stream
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      mediaStreamRef.current = stream;
-      startAudioLevelMeter(stream);
-      
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       const recognition = new SpeechRecognition();
       recognitionRef.current = recognition;
@@ -145,6 +134,7 @@ const SpeakingTestPage = () => {
       
       recognition.onstart = () => {
         setIsRecording(true);
+        setErrorMsg('');
       };
       
       recognition.onresult = (event) => {
@@ -161,19 +151,19 @@ const SpeakingTestPage = () => {
         let userMsg = '';
         switch (event.error) {
           case 'no-speech':
-            userMsg = 'No speech detected. Please speak clearly into the microphone. Click "Start Recording" and speak immediately.';
+            userMsg = 'No speech detected. Make sure your microphone is on and speak clearly. Tap the microphone button again.';
             break;
           case 'audio-capture':
-            userMsg = 'No microphone found. Please check your microphone.';
+            userMsg = 'No microphone found. Please check your device settings.';
             break;
           case 'not-allowed':
-            userMsg = 'Microphone access denied. Please allow microphone in your browser settings.';
+            userMsg = 'Microphone access denied. Please tap the microphone icon in the browser bar to allow access.';
             break;
           case 'network':
-            userMsg = 'Network error. Please check your internet connection and try again.';
+            userMsg = 'Network error. Please check your internet connection.';
             break;
           default:
-            userMsg = `Recognition error: ${event.error}. Please try again.`;
+            userMsg = `Error: ${event.error}. Please try again.`;
         }
         setErrorMsg(userMsg);
         stopRecording();
@@ -181,23 +171,13 @@ const SpeakingTestPage = () => {
       
       recognition.onend = () => {
         setIsRecording(false);
-        if (mediaStreamRef.current) {
-          mediaStreamRef.current.getTracks().forEach(track => track.stop());
-          mediaStreamRef.current = null;
-        }
-        if (audioContextRef.current) {
-          audioContextRef.current.close();
-          audioContextRef.current = null;
-        }
-        cancelAnimationFrame(animationFrameRef.current);
-        setAudioLevel(0);
       };
       
       recognition.start();
       
     } catch (err) {
       console.error(err);
-      setErrorMsg('Could not access microphone. Please check permissions.');
+      setErrorMsg('Could not start recognition. Please try again.');
       setIsRecording(false);
     }
   };
@@ -206,6 +186,7 @@ const SpeakingTestPage = () => {
     if (recognitionRef.current) {
       recognitionRef.current.stop();
     }
+    setIsRecording(false);
   };
   
   const handleSentenceChange = (e) => {
@@ -233,34 +214,32 @@ const SpeakingTestPage = () => {
   }
   
   return (
-    <div className="max-w-4xl mx-auto px-4 py-16">
+    <div className="max-w-4xl mx-auto px-4 py-8 md:py-16">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-white/70 rounded-3xl p-8 shadow-2xl"
+        className="bg-white/70 rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-2xl"
       >
-        <h2 className="text-3xl font-bold text-center mb-2">🎤 Speaking Test</h2>
-        <p className="text-center text-gray-600 mb-6">
-          Record yourself saying the German sentence and get a pronunciation score.
+        <h2 className="text-2xl md:text-3xl font-bold text-center mb-2">🎤 Speaking Test</h2>
+        <p className="text-center text-gray-600 mb-6 text-sm md:text-base">
+          Tap "Allow Microphone" then record yourself saying the German sentence.
         </p>
         
-        <div className="text-center mb-4">
-          <button
-            onClick={testMicrophone}
-            className="text-sm bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-full transition"
-          >
-            🎙️ Test Microphone
-          </button>
-          {micTestResult && (
-            <p className={`text-sm mt-2 ${micTestResult.includes('✅') ? 'text-green-600' : 'text-red-600'}`}>
-              {micTestResult}
-            </p>
-          )}
-        </div>
+        {/* Microphone permission button */}
+        {micPermission === null && (
+          <div className="text-center mb-6">
+            <button
+              onClick={requestMicPermission}
+              className="bg-purple-600 text-white px-6 py-3 rounded-full font-bold shadow-lg hover:bg-purple-700 transition"
+            >
+              🎤 Allow Microphone
+            </button>
+          </div>
+        )}
         
-        {/* Audio level meter (shows when mic is active) */}
-        {(mediaStreamRef.current || isRecording) && (
-          <div className="mb-4">
+        {/* Audio level meter (only shows when mic is active) */}
+        {micPermission === true && (
+          <div className="mb-6">
             <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
               <motion.div
                 className="h-full bg-green-500"
@@ -268,18 +247,17 @@ const SpeakingTestPage = () => {
                 transition={{ duration: 0.05 }}
               />
             </div>
-            <p className="text-xs text-gray-500 text-center mt-1">
-              {isRecording ? "Listening... Speak now!" : "Microphone active"}
-            </p>
+            <p className="text-xs text-center text-gray-500 mt-1">Microphone level {audioLevel > 5 ? '(sound detected)' : '(speak to see movement)'}</p>
           </div>
         )}
         
+        {/* Sentence selection */}
         <div className="mb-6">
-          <label className="block text-sm font-medium text-gray-700 mb-2">Choose a sentence to practice:</label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Choose a sentence:</label>
           <select
             value={selectedSentence.german}
             onChange={handleSentenceChange}
-            className="w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 text-sm md:text-base"
           >
             {sentences.map(s => (
               <option key={s.german} value={s.german}>{s.german} – {s.english}</option>
@@ -287,41 +265,47 @@ const SpeakingTestPage = () => {
           </select>
         </div>
         
+        {/* Target sentence */}
         <div className="bg-purple-50 rounded-xl p-4 mb-6">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between flex-wrap gap-2">
             <div>
-              <span className="text-sm text-gray-500">Target sentence:</span>
-              <p className="text-xl font-bold text-purple-800 mt-1">{selectedSentence.german}</p>
+              <span className="text-sm text-gray-500">Say this:</span>
+              <p className="text-lg md:text-xl font-bold text-purple-800 mt-1">{selectedSentence.german}</p>
               <p className="text-sm text-gray-600">{selectedSentence.english}</p>
             </div>
             <PronounceButton word={selectedSentence.german} />
           </div>
         </div>
         
-        <div className="text-center mb-6">
-          {!isRecording ? (
-            <button
-              onClick={startRecording}
-              className="bg-red-500 hover:bg-red-600 text-white px-8 py-3 rounded-full font-bold shadow-lg transition transform hover:scale-105"
-            >
-              🎙️ Start Recording
-            </button>
-          ) : (
-            <button
-              onClick={stopRecording}
-              className="bg-gray-500 hover:bg-gray-600 text-white px-8 py-3 rounded-full font-bold shadow-lg transition"
-            >
-              ⏹️ Stop Recording
-            </button>
-          )}
-        </div>
+        {/* Recording button (only if mic permission granted) */}
+        {micPermission === true && (
+          <div className="text-center mb-6">
+            {!isRecording ? (
+              <button
+                onClick={startRecording}
+                className="bg-red-500 hover:bg-red-600 text-white px-8 py-3 rounded-full font-bold shadow-lg transition transform hover:scale-105 text-lg"
+              >
+                🎙️ Start Recording
+              </button>
+            ) : (
+              <button
+                onClick={stopRecording}
+                className="bg-gray-500 hover:bg-gray-600 text-white px-8 py-3 rounded-full font-bold shadow-lg transition text-lg"
+              >
+                ⏹️ Stop Recording
+              </button>
+            )}
+          </div>
+        )}
         
+        {/* Error message */}
         {errorMsg && (
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-xl mb-4 text-sm">
             ⚠️ {errorMsg}
           </div>
         )}
         
+        {/* Results */}
         <AnimatePresence>
           {recordedText && (
             <motion.div
@@ -329,7 +313,7 @@ const SpeakingTestPage = () => {
               animate={{ opacity: 1, scale: 1 }}
               className="bg-white rounded-xl p-4 shadow mb-4"
             >
-              <h3 className="font-semibold text-gray-700">What you said:</h3>
+              <h3 className="font-semibold text-gray-700">You said:</h3>
               <p className="text-gray-800 mt-1 italic">"{recordedText}"</p>
             </motion.div>
           )}
@@ -340,8 +324,8 @@ const SpeakingTestPage = () => {
               animate={{ opacity: 1, y: 0 }}
               className="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-xl p-4 text-center"
             >
-              <div className="text-5xl font-bold text-purple-700">{score}%</div>
-              <p className="text-gray-700 mt-2">{feedback}</p>
+              <div className="text-4xl md:text-5xl font-bold text-purple-700">{score}%</div>
+              <p className="text-gray-700 mt-2 text-sm md:text-base">{feedback}</p>
               {score < 80 && (
                 <button
                   onClick={() => {
@@ -359,7 +343,13 @@ const SpeakingTestPage = () => {
         </AnimatePresence>
         
         <div className="mt-8 p-4 bg-blue-50 rounded-xl text-sm text-center">
-          💡 <strong>Tips:</strong> Speak clearly and immediately after clicking "Start Recording". Make sure your microphone is working (use "Test Microphone" button). The score is based on word recognition.
+          💡 <strong>Mobile tips:</strong> 
+          <ul className="text-left mt-2 space-y-1 text-xs">
+            <li>• Tap "Allow Microphone" first, then speak clearly after tapping "Start Recording".</li>
+            <li>• On iPhone, you may need to tap the recording button twice due to browser restrictions.</li>
+            <li>• Make sure your phone isn't on silent mode.</li>
+            <li>• If nothing happens, refresh the page and try again.</li>
+          </ul>
         </div>
       </motion.div>
     </div>

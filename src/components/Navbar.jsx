@@ -8,6 +8,7 @@ const navLinks = [
   { path: '/noun-quiz', label: '🏷️ Noun Quiz' },
   { path: '/article-quiz', label: '🎯 Article Quiz' }, 
   { path: '/phrase-quiz', label: '💬 Phrase Quiz' },
+  { path: '/speaking-test', label: '🎤 Speaking Test' },
   { path: '/numbers', label: '🔢 Numbers' },
   { path: '/days', label: '📅 Days' },        // NEW
   { path: '/months', label: '📆 Months' },    // NEW

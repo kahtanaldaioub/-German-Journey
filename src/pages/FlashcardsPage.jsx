@@ -161,7 +161,7 @@ const FlashcardsPage = () => {
         <div className="flex flex-col items-center">
           {/* Flashcard */}
           <div
-            className="w-full max-w-md h-80 bg-gradient-to-br from-purple-100 to-indigo-100 rounded-2xl shadow-xl flex flex-col justify-center items-center p-6 cursor-pointer transition-transform hover:scale-105"
+            className="w-full max-w-md h-80 bg-linear-to-br from-purple-100 to-indigo-100 rounded-2xl shadow-xl flex flex-col justify-center items-center p-6 cursor-pointer transition-transform hover:scale-105"
             onClick={() => setIsFlipped(!isFlipped)}
           >
             <div className="text-center">
@@ -201,7 +201,7 @@ const FlashcardsPage = () => {
             
             <button 
               onClick={randomFlashcard} 
-              className="flex items-center gap-2 bg-gradient-to-r from-gray-700 to-gray-800 text-white px-6 py-2.5 rounded-full font-semibold shadow-md hover:shadow-lg hover:from-gray-800 hover:to-gray-900 transition-all duration-200 active:scale-95"
+              className="flex items-center gap-2 bg-linear-to-r from-gray-700 to-gray-800 text-white px-6 py-2.5 rounded-full font-semibold shadow-md hover:shadow-lg hover:from-gray-800 hover:to-gray-900 transition-all duration-200 active:scale-95"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />

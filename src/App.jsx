@@ -25,7 +25,6 @@ import StoriesPage from './pages/StoriesPage';
 import ConversationsPage from './pages/ConversationsPage';
 import ArticleQuizPage from './pages/ArticleQuizPage';
 import RadioPage from './pages/RadioPage';
-import SpeakingTestPage from './pages/SpeakingTestPage';
 function App() {
   return (
     <div className="bg-linear-to-b from-indigo-50 via-purple-50 to-pink-50 min-h-screen font-sans">
@@ -57,7 +56,6 @@ function App() {
         <Route path="/conversations" element={<ConversationsPage />} />
         <Route path="/article-quiz" element={<ArticleQuizPage />} />
         <Route path="/radio" element={<RadioPage />} />
-        <Route path="/speaking-test" element={<SpeakingTestPage />} />
       </Routes>
     </div>
   );

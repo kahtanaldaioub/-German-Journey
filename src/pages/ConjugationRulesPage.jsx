@@ -1,5 +1,6 @@
 import React from 'react';
 import PronounceButton from '../components/PronounceButton';
+import ScrollReveal from '../components/ScrollReveal';
 
 const ConjugationRulesPage = () => {
   const rules = [
@@ -87,7 +88,7 @@ const ConjugationRulesPage = () => {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8 md:py-12">
-
+      <ScrollReveal>
         <div className="bg-white/70 rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-2xl">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-2">📖 German Conjugation Rules</h2>
           <p className="text-center text-gray-600 mb-8 text-sm md:text-base">
@@ -100,8 +101,8 @@ const ConjugationRulesPage = () => {
                 <h3 className="text-xl font-bold text-purple-700 mb-2">{rule.title}</h3>
                 <p className="text-gray-600 text-sm mb-4">{rule.description}</p>
 
-                {/* Pattern table if present */}
-                {rule.pattern && (
+                {/* Pattern table - only if pattern is an array */}
+                {Array.isArray(rule.pattern) && (
                   <div className="overflow-x-auto mb-4">
                     <table className="w-full text-sm border-collapse">
                       <thead>
@@ -121,10 +122,10 @@ const ConjugationRulesPage = () => {
                             <td className="p-2 text-center">
                               <PronounceButton word={item.example.split('-')[0] || item.example} />
                             </td>
-                           </tr>
+                          </tr>
                         ))}
                       </tbody>
-                     </table>
+                    </table>
                   </div>
                 )}
 
@@ -141,7 +142,7 @@ const ConjugationRulesPage = () => {
                 )}
 
                 {/* List of examples (for irregulars, separable, auxiliaries) */}
-                {rule.examples && (
+                {rule.examples && Array.isArray(rule.examples) && (
                   <div className="space-y-2 mt-3">
                     {rule.examples.map((ex, i) => (
                       <div key={i} className="bg-gray-50 p-2 rounded flex justify-between items-center">
@@ -162,7 +163,7 @@ const ConjugationRulesPage = () => {
             💡 <strong>Tip:</strong> Practice conjugating verbs out loud. The more you use them, the faster they become automatic.
           </div>
         </div>
-
+      </ScrollReveal>
     </div>
   );
 };

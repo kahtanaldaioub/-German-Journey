@@ -28,6 +28,8 @@ const getConjugation = (verbInfinitive) => {
   if (irregulars[verbInfinitive]) return irregulars[verbInfinitive];
 
   let stem = verbInfinitive.slice(0, -2);
+  
+  // Special handling for -eln verbs
   if (verbInfinitive.endsWith("eln")) {
     stem = verbInfinitive.slice(0, -3);
     return {
@@ -39,6 +41,8 @@ const getConjugation = (verbInfinitive) => {
       sie: stem + "eln"
     };
   }
+  
+  // Special handling for -ern verbs
   if (verbInfinitive.endsWith("ern")) {
     stem = verbInfinitive.slice(0, -3);
     return {
@@ -51,17 +55,40 @@ const getConjugation = (verbInfinitive) => {
     };
   }
 
-  // Regular verbs – fix for sibilant stems (s, ss, ß, x, z)
-  const endsWithSibilant = (s) => /[sßxz]$/.test(s);
-  const duForm = endsWithSibilant(stem) ? stem + "t" : stem + "st";
-  const erForm = stem + "t";
+  // Regular verbs: detect if stem needs -et endings (for du, er, ihr)
+  const needsET = (s) => {
+    // Stem ends with d or t
+    if (/[dt]$/.test(s)) return true;
+    // Stem ends with consonant + m or n (e.g., atm, zeichn, rechn)
+    if (/[^aeiou][mn]$/.test(s)) return true;
+    return false;
+  };
+  
+  // Sibilant stems (s, ss, ß, x, z) get only -t for du (not -st)
+  const needsOnlyTForDu = (s) => /[sßxz]$/.test(s);
+
+  let duForm, erForm, ihrForm;
+
+  if (needsET(stem)) {
+    duForm = stem + "est";
+    erForm = stem + "et";
+    ihrForm = stem + "et";
+  } else if (needsOnlyTForDu(stem)) {
+    duForm = stem + "t";
+    erForm = stem + "t";
+    ihrForm = stem + "t";
+  } else {
+    duForm = stem + "st";
+    erForm = stem + "t";
+    ihrForm = stem + "t";
+  }
 
   return {
     ich: stem + "e",
     du: duForm,
     er: erForm,
     wir: stem + "en",
-    ihr: stem + "t",
+    ihr: ihrForm,
     sie: stem + "en"
   };
 };

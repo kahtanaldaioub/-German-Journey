@@ -1,6 +1,5 @@
 import React from 'react';
 import PronounceButton from '../components/PronounceButton';
-import ScrollReveal from '../components/ScrollReveal';
 
 const ConjugationRulesPage = () => {
   const rules = [
@@ -88,7 +87,7 @@ const ConjugationRulesPage = () => {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8 md:py-12">
-      <ScrollReveal>
+
         <div className="bg-white/70 rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-2xl">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-2">📖 German Conjugation Rules</h2>
           <p className="text-center text-gray-600 mb-8 text-sm md:text-base">
@@ -163,7 +162,7 @@ const ConjugationRulesPage = () => {
             💡 <strong>Tip:</strong> Practice conjugating verbs out loud. The more you use them, the faster they become automatic.
           </div>
         </div>
-      </ScrollReveal>
+
     </div>
   );
 };

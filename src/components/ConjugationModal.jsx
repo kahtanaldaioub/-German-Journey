@@ -56,11 +56,12 @@ const getConjugation = (verbInfinitive) => {
   }
 
   // Regular verbs: detect if stem needs -et endings (for du, er, ihr)
-  const needsET = (s) => {
-    // Stem ends with d or t
-    if (/[dt]$/.test(s)) return true;
-    // Stem ends with consonant + m or n (e.g., atm, zeichn, rechn)
-    if (/[^aeiou][mn]$/.test(s)) return true;
+  // Correct rule: stem ends with -d, -t, or specific consonant clusters that make pronunciation hard
+  const needsET = (stem) => {
+    // Ends with d or t
+    if (/[dt]$/.test(stem)) return true;
+    // Ends with common clusters that require -et: dm, tm, chn, ffn, gn, pf, bn, pn
+    if (/(dm|tm|chn|ffn|gn|pf|bn|pn)$/.test(stem)) return true;
     return false;
   };
   

@@ -50,10 +50,16 @@ const getConjugation = (verbInfinitive) => {
       sie: stem + "ern"
     };
   }
+
+  // Regular verbs – fix for sibilant stems (s, ss, ß, x, z)
+  const endsWithSibilant = (s) => /[sßxz]$/.test(s);
+  const duForm = endsWithSibilant(stem) ? stem + "t" : stem + "st";
+  const erForm = stem + "t";
+
   return {
     ich: stem + "e",
-    du: stem + "st",
-    er: stem + "t",
+    du: duForm,
+    er: erForm,
     wir: stem + "en",
     ihr: stem + "t",
     sie: stem + "en"

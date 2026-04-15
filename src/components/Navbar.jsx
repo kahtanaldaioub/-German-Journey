@@ -17,7 +17,6 @@ const navLinks = [
   { path: '/pronouns', label: '👤 Pronouns' },
   { path: '/sentence-structure', label: '📝 Structure' },
   { path: '/verbs', label: '⚡ Verbs' },
-  { path: '/conjugation-rules', label: '📖 Conjugation' },
   { path: '/nouns', label: '🏷️ Nouns' },
   { path: '/chunks', label: '💬 Chunks' },
   { path: '/cases', label: '📚 Cases' },

@@ -26,6 +26,7 @@ import ConversationsPage from './pages/ConversationsPage';
 import ArticleQuizPage from './pages/ArticleQuizPage';
 import RadioPage from './pages/RadioPage';
 import ConjugationRulesPage from './pages/ConjugationRulesPage';
+import DailyStoryPage from './pages/DailyStoryPage';
 function App() {
   return (
     <div className="bg-linear-to-b from-indigo-50 via-purple-50 to-pink-50 min-h-screen font-sans">
@@ -58,6 +59,7 @@ function App() {
         <Route path="/article-quiz" element={<ArticleQuizPage />} />
         <Route path="/radio" element={<RadioPage />} />
         <Route path="/conjugation-rules" element={<ConjugationRulesPage />} />
+        <Route path="/daily-story" element={<DailyStoryPage />} />
       </Routes>
     </div>
   );

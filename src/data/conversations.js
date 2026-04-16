@@ -17,7 +17,7 @@ export const conversations = [
     id: 2,
     title: "Nach dem Weg fragen",
     titleEn: "Asking for Directions",
-    imageUrl: "https://images.unsplash.com/photo-1449247709967-d4461a6a6103?w=600&h=400&fit=crop",
+    imageUrl: "https://images.unsplash.com/photo-1496568816309-51d7c20e3b21?w=600&h=400&fit=crop",
     alt: "Street map and compass",
     lines: [
       { speaker: "Tourist", german: "Entschuldigung, wo ist der Bahnhof?", english: "Excuse me, where is the train station?" },

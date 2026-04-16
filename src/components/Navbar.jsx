@@ -29,7 +29,6 @@ const navLinks = [
   { path: '/stories', label: '📖 Stories' }, 
   { path: '/conversations', label: '💬 Conversations' },  
   { path: '/radio', label: '📻 Radio' }, 
-  { path: '/daily-story', label: '📖 Daily Story' },
 ];
 
 const Navbar = () => {

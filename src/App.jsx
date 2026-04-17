@@ -7,7 +7,9 @@ import NounsQuizPage from './pages/NounsQuizPage';
 import PhrasesQuizPage from './pages/PhrasesQuizPage';
 import NumbersPage from './pages/NumbersPage';
 import AlphabetPage from './pages/AlphabetPage';
-import PronounsPage from './pages/PronounsPage';
+import PersonalPronounsPage from './pages/PersonalPronounsPage';
+import QuestionWordsPage from './pages/QuestionWordsPage';
+import IndefiniteArticlesPage from './pages/IndefiniteArticlesPage';
 import SentenceStructurePage from './pages/SentenceStructurePage';
 import VerbsPage from './pages/VerbsPage';
 import NounsPage from './pages/NounsPage';
@@ -43,7 +45,9 @@ function App() {
         <Route path="/phrase-quiz" element={<PhrasesQuizPage />} />
         <Route path="/numbers" element={<NumbersPage />} />
         <Route path="/alphabet" element={<AlphabetPage />} />
-        <Route path="/pronouns" element={<PronounsPage />} />
+        <Route path="/personal-pronouns" element={<PersonalPronounsPage />} />
+        <Route path="/question-words" element={<QuestionWordsPage />} />
+        <Route path="/indefinite-articles" element={<IndefiniteArticlesPage />} />
         <Route path="/sentence-structure" element={<SentenceStructurePage />} />
         <Route path="/verbs" element={<VerbsPage />} />
         <Route path="/nouns" element={<NounsPage />} />

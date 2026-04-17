@@ -1,153 +1,166 @@
 import React, { useState } from 'react';
 import PronounceButton from '../components/PronounceButton';
-import { casesData } from '../data/cases';
 
 const CasesPage = () => {
-  const [quizAnswer, setQuizAnswer] = useState('');
-  const [quizFeedback, setQuizFeedback] = useState('');
-  const [quizCase, setQuizCase] = useState(null);
+  const [selectedCase, setSelectedCase] = useState('Nominative');
 
-  const generateQuiz = () => {
-    const allExamples = casesData.flatMap(c => 
-      c.examples.map(ex => ({ sentence: ex.german, case: c.name }))
-    );
-    const random = allExamples[Math.floor(Math.random() * allExamples.length)];
-    setQuizCase(random);
-    setQuizAnswer('');
-    setQuizFeedback('');
-  };
-
-  const checkQuizAnswer = () => {
-    if (!quizCase) return;
-    if (quizAnswer.toLowerCase() === quizCase.case.toLowerCase()) {
-      setQuizFeedback('✅ Correct! Well done.');
-    } else {
-      setQuizFeedback(`❌ Wrong! The sentence "${quizCase.sentence}" is in the ${quizCase.case} case.`);
+  // Case data with expanded examples (5 per case)
+  const casesData = {
+    Nominative: {
+      usage: "subject of the sentence – who/what is doing the action",
+      color: "blue",
+      articles: { der: "der", die: "die", das: "das", plural: "die" },
+      examples: [
+        { german: "Der Hund schläft.", english: "The dog sleeps." },
+        { german: "Die Katze miaut.", english: "The cat meows." },
+        { german: "Das Kind spielt.", english: "The child plays." },
+        { german: "Der Lehrer erklärt die Grammatik.", english: "The teacher explains the grammar." },
+        { german: "Die Sonne scheint hell.", english: "The sun shines brightly." }
+      ],
+      extraNote: "The nominative case is used for the subject of the sentence – the person or thing performing the action."
+    },
+    Accusative: {
+      usage: "direct object – who/what receives the action",
+      color: "green",
+      articles: { der: "den", die: "die", das: "das", plural: "die" },
+      examples: [
+        { german: "Ich sehe den Hund.", english: "I see the dog." },
+        { german: "Sie liest die Zeitung.", english: "She reads the newspaper." },
+        { german: "Wir kaufen das Buch.", english: "We buy the book." },
+        { german: "Er hat den Schlüssel verloren.", english: "He lost the key." },
+        { german: "Kannst du die Tasche finden?", english: "Can you find the bag?" }
+      ],
+      extraNote: "Accusative is also used after certain prepositions (durch, für, gegen, ohne, um) and with two‑way prepositions when movement is involved (e.g., 'Ich gehe in den Park')."
+    },
+    Dative: {
+      usage: "indirect object – to/for whom something is done",
+      color: "orange",
+      articles: { der: "dem", die: "der", das: "dem", plural: "den" },
+      examples: [
+        { german: "Ich gebe dem Hund einen Knochen.", english: "I give the dog a bone." },
+        { german: "Er hilft der Frau.", english: "He helps the woman." },
+        { german: "Wir folgen dem Auto.", english: "We follow the car." },
+        { german: "Sie dankt ihrer Mutter.", english: "She thanks her mother." },
+        { german: "Das Kind antwortet seinem Freund.", english: "The child answers his friend." }
+      ],
+      extraNote: "Dative is used after certain prepositions (aus, bei, mit, nach, von, zu) and with two‑way prepositions when location is expressed (e.g., 'Ich bin im Park')."
+    },
+    Genitive: {
+      usage: "possession – whose",
+      color: "purple",
+      articles: { der: "des", die: "der", das: "des", plural: "der" },
+      examples: [
+        { german: "Das ist das Haus des Mannes.", english: "That is the man's house." },
+        { german: "Die Farbe der Blume ist schön.", english: "The color of the flower is beautiful." },
+        { german: "Das Ende des Films war spannend.", english: "The end of the movie was exciting." },
+        { german: "Der Name des Lehrers ist Herr Schmidt.", english: "The teacher's name is Mr. Schmidt." },
+        { german: "Die Schönheit der Natur ist beeindruckend.", english: "The beauty of nature is impressive." }
+      ],
+      extraNote: "Genitive is often replaced by 'von' + dative in everyday spoken German, but it's still common in formal writing."
     }
   };
 
-  // Map case name to a static color class
-  const getBorderColor = (caseName) => {
-    switch(caseName) {
-      case 'Nominative': return 'border-blue-500';
-      case 'Accusative': return 'border-green-500';
-      case 'Dative': return 'border-orange-500';
-      case 'Genitive': return 'border-purple-500';
-      default: return 'border-gray-500';
+  const cases = ['Nominative', 'Accusative', 'Dative', 'Genitive'];
+  const current = casesData[selectedCase];
+
+  const getColorClasses = (color) => {
+    switch(color) {
+      case 'blue': return 'border-blue-500 bg-blue-50';
+      case 'green': return 'border-green-500 bg-green-50';
+      case 'orange': return 'border-orange-500 bg-orange-50';
+      case 'purple': return 'border-purple-500 bg-purple-50';
+      default: return 'border-gray-500 bg-gray-50';
     }
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8 md:py-12">
+    <div className="max-w-4xl mx-auto px-4 py-8 md:py-12">
       <div className="bg-white/70 rounded-2xl md:rounded-3xl p-6 md:p-8 shadow-2xl">
         <h2 className="text-3xl md:text-4xl font-bold text-center mb-2">📚 The Four German Cases</h2>
         <p className="text-center text-gray-600 mb-8 text-sm md:text-base">
-          Nominative • Accusative • Dative • Genitive – with article tables and examples.
+          Select a case to see its article declension, example sentences, and usage notes.
         </p>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {casesData.map(c => (
-            <div key={c.name} className={`bg-white rounded-xl p-4 shadow border-l-8 ${getBorderColor(c.name)}`}>
-              <h3 className="text-xl font-bold text-purple-700">{c.name}</h3>
-              <p className="text-sm text-gray-600 mt-1">{c.usage}</p>
-              
-              {/* Article table with pronunciation */}
-              <div className="overflow-x-auto mt-3">
-                <table className="w-full text-sm border-collapse">
-                  <thead>
-                    <tr className="border-b bg-gray-50">
-                      <th className="p-2 text-left">Gender</th>
-                      <th className="p-2 text-left">Article</th>
-                      <th className="p-2">Listen</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {[
-                      { label: "der (masc)", key: "der" },
-                      { label: "die (fem)", key: "die" },
-                      { label: "das (neut)", key: "das" },
-                      { label: "plural", key: "plural" }
-                    ].map(g => (
-                      <tr key={g.key} className="border-b">
-                        <td className="p-2">{g.label}</td>
-                        <td className="p-2 font-mono font-bold">{c.articles[g.key]}</td>
-                        <td className="p-2 text-center">
-                          <PronounceButton word={c.articles[g.key]} />
-                        </td>
-                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-              
-              {/* Examples */}
-              <div className="mt-3">
-                <p className="text-xs font-semibold text-gray-500 mb-2">📖 Examples:</p>
-                <div className="space-y-2">
-                  {c.examples.map((ex, idx) => (
-                    <div key={idx} className="bg-gray-50 p-2 rounded flex justify-between items-center gap-2">
-                      <div>
-                        <p className="text-sm font-medium">{ex.german}</p>
-                        <p className="text-xs text-gray-500">→ {ex.english}</p>
-                      </div>
-                      <PronounceButton word={ex.german} />
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
+
+        {/* Case selector buttons */}
+        <div className="flex flex-wrap justify-center gap-3 mb-8">
+          {cases.map(c => (
+            <button
+              key={c}
+              onClick={() => setSelectedCase(c)}
+              className={`px-5 py-2 rounded-full font-medium transition ${
+                selectedCase === c
+                  ? 'bg-purple-600 text-white shadow-md'
+                  : 'bg-gray-200 text-gray-700 hover:bg-purple-100'
+              }`}
+            >
+              {c}
+            </button>
           ))}
         </div>
 
-        {/* Mini Quiz Section */}
-        <div className="mt-10 p-5 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl">
-          <h3 className="text-xl font-bold text-center mb-3">🧠 Test Yourself: Identify the Case</h3>
-          {!quizCase ? (
-            <div className="text-center">
-              <button onClick={generateQuiz} className="bg-purple-600 text-white px-6 py-2 rounded-full hover:bg-purple-700 transition shadow">
-                Start a Quiz
-              </button>
+        {/* Active case card */}
+        <div className={`bg-white rounded-xl shadow-lg overflow-hidden border-l-8 ${getColorClasses(current.color)}`}>
+          <div className="p-6">
+            <h3 className="text-2xl font-bold text-purple-700 mb-2">{selectedCase}</h3>
+            <p className="text-gray-700 text-sm mb-4">{current.usage}</p>
+
+            {/* Article table */}
+            <div className="overflow-x-auto mb-6">
+              <table className="w-full text-sm border-collapse">
+                <thead>
+                  <tr className="bg-gray-100">
+                    <th className="p-2 text-left">Gender</th>
+                    <th className="p-2 text-left">Article</th>
+                    <th className="p-2">Listen</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    { label: "der (masculine)", key: "der" },
+                    { label: "die (feminine)", key: "die" },
+                    { label: "das (neuter)", key: "das" },
+                    { label: "plural", key: "plural" }
+                  ].map(g => (
+                    <tr key={g.key} className="border-b">
+                      <td className="p-2">{g.label}</td>
+                      <td className="p-2 font-mono font-bold">{current.articles[g.key]}</td>
+                      <td className="p-2 text-center">
+                        <PronounceButton word={current.articles[g.key]} />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
-          ) : (
-            <div className="text-center">
-              <div className="bg-white rounded-xl p-4 mb-4 shadow-sm">
-                <p className="text-lg font-semibold">“{quizCase.sentence}”</p>
-              </div>
-              <div className="flex justify-center gap-3 flex-wrap">
-                {casesData.map(c => (
-                  <button
-                    key={c.name}
-                    onClick={() => {
-                      setQuizAnswer(c.name);
-                      setQuizFeedback('');
-                    }}
-                    className={`px-4 py-2 rounded-full transition ${
-                      quizAnswer === c.name ? 'bg-purple-600 text-white shadow' : 'bg-gray-200 hover:bg-purple-100'
-                    }`}
-                  >
-                    {c.name}
-                  </button>
+
+            {/* Example sentences (5 examples) */}
+            <div className="mb-5">
+              <h4 className="text-md font-semibold text-purple-600 mb-2">📖 Example sentences</h4>
+              <div className="space-y-2">
+                {current.examples.map((ex, idx) => (
+                  <div key={idx} className="bg-gray-50 p-2 rounded flex justify-between items-center gap-2">
+                    <div>
+                      <p className="text-sm font-medium">{ex.german}</p>
+                      <p className="text-xs text-gray-500">→ {ex.english}</p>
+                    </div>
+                    <PronounceButton word={ex.german} />
+                  </div>
                 ))}
               </div>
-              <button
-                onClick={checkQuizAnswer}
-                disabled={!quizAnswer}
-                className="mt-4 bg-green-500 text-white px-6 py-2 rounded-full hover:bg-green-600 transition disabled:opacity-50 shadow"
-              >
-                Check Answer
-              </button>
-              {quizFeedback && (
-                <p className="mt-3 text-sm font-medium p-2 bg-white rounded shadow-sm">{quizFeedback}</p>
-              )}
-              <button onClick={generateQuiz} className="mt-4 text-sm text-purple-600 underline">
-                New Sentence →
-              </button>
             </div>
-          )}
+
+            {/* Extra note (including two-way prepositions for Acc/Dat) */}
+            <div className="p-3 rounded text-sm bg-yellow-50 border border-yellow-200">
+              <span className="font-semibold">💡 {selectedCase} tip:</span> {current.extraNote}
+            </div>
+          </div>
         </div>
 
+        {/* Additional global tip about two-way prepositions */}
         <div className="mt-6 p-4 bg-blue-50 rounded-xl text-sm">
-          💡 <strong>Tip:</strong> The genitive is often replaced by "von" + dative in everyday speech. Two‑way prepositions (an, auf, hinter, in, neben, über, unter, vor, zwischen) take accusative (movement) or dative (location).
+          <p className="font-semibold">🔁 Two‑way prepositions (an, auf, hinter, in, neben, über, unter, vor, zwischen):</p>
+          <p>→ <strong>Accusative</strong> = movement / direction (Wohin?)<br />
+             → <strong>Dative</strong> = location / position (Wo?)</p>
         </div>
       </div>
     </div>

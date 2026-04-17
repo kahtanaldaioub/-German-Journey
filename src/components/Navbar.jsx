@@ -12,9 +12,11 @@ const navLinks = [
   { path: '/numbers', label: '🔢 Numbers' },
   { path: '/days', label: '📅 Days' },
   { path: '/months', label: '📆 Months' },
+  { path: '/time', label: '⏰ Time' },
   { path: '/colors', label: '🎨 Colors' },
   { path: '/alphabet', label: '🔤 Alphabet' },
   { path: '/pronouns', label: '👤 Pronouns' },
+  { path: '/possessive', label: '👤 Possessive' }, 
   { path: '/sentence-structure', label: '📝 Structure' },
   { path: '/verbs', label: '⚡ Verbs' },
   { path: '/conjugation-rules', label: '📖 Conjugation' },
@@ -29,6 +31,7 @@ const navLinks = [
   { path: '/stories', label: '📖 Stories' }, 
   { path: '/conversations', label: '💬 Conversations' },  
   { path: '/radio', label: '📻 Radio' }, 
+  
 ];
 
 const Navbar = () => {
@@ -39,7 +42,7 @@ const Navbar = () => {
   const telegramUrl = "https://t.me/sitesUse";
 
   return (
-    <nav className="sticky top-2 z-40 bg-white/80 backdrop-blur-md rounded-full shadow-lg mx-4 px-4 py-2 relative">
+    <nav className="sticky top-2 z-40 bg-white/80 backdrop-blur-md rounded-full shadow-lg mx-4 px-4 py-2">
       <div className="flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2">
           <span className="text-xl font-bold bg-linear-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">

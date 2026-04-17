@@ -28,6 +28,8 @@ import RadioPage from './pages/RadioPage';
 import ConjugationRulesPage from './pages/ConjugationRulesPage';
 import ConversationDetailPage from './pages/ConversationDetailPage';
 import StoryDetailPage from './pages/StoryDetailPage';
+import PossessivePage from './pages/PossessivePage';
+import TimePage from './pages/TimePage';
 function App() {
   return (
     <div className="bg-linear-to-b from-indigo-50 via-purple-50 to-pink-50 min-h-screen font-sans">
@@ -62,6 +64,8 @@ function App() {
         <Route path="/conjugation-rules" element={<ConjugationRulesPage />} />
         <Route path="/conversation/:id" element={<ConversationDetailPage />} />
         <Route path="/story/:id" element={<StoryDetailPage />} />
+        <Route path="/possessive" element={<PossessivePage />} />
+        <Route path="/time" element={<TimePage />} />
       </Routes>
     </div>
   );

@@ -24,16 +24,70 @@ const ImperativePage = () => {
 
   // Irregular verbs: sein, haben, werden (with English)
   const irregulars = [
-    { verb: "sein (to be)", du: "sei", ihr: "seid", Sie: "seien Sie", wir: "seien wir", example: "Sei ruhig!", translation: "Be quiet!" },
-    { verb: "haben (to have)", du: "hab", ihr: "habt", Sie: "haben Sie", wir: "haben wir", example: "Hab Geduld!", translation: "Have patience!" },
-    { verb: "werden (to become)", du: "werd", ihr: "werdet", Sie: "werden Sie", wir: "werden wir", example: "Werd nicht böse!", translation: "Don't get angry!" }
-  ];
+  { 
+    verb: "sein (to be)", 
+    du: "sei", 
+    ihr: "seid", 
+    Sie: "seien Sie", 
+    wir: "seien wir",
+    duFull: "Sei ruhig!", 
+    ihrFull: "Seid ruhig!", 
+    SieFull: "Seien Sie ruhig!", 
+    wirFull: "Seien wir ruhig!",
+    translation: "Be quiet!" 
+  },
+  { 
+    verb: "haben (to have)", 
+    du: "hab", 
+    ihr: "habt", 
+    Sie: "haben Sie", 
+    wir: "haben wir",
+    duFull: "Hab Geduld!", 
+    ihrFull: "Habt Geduld!", 
+    SieFull: "Haben Sie Geduld!", 
+    wirFull: "Haben wir Geduld!",
+    translation: "Have patience!" 
+  },
+  { 
+    verb: "werden (to become)", 
+    du: "werd", 
+    ihr: "werdet", 
+    Sie: "werden Sie", 
+    wir: "werden wir",
+    duFull: "Werd nicht böse!", 
+    ihrFull: "Werdet nicht böse!", 
+    SieFull: "Werden Sie nicht böse!", 
+    wirFull: "Werden wir nicht böse!",
+    translation: "Don't get angry!" 
+  }
+];
 
   // Verbs ending with -eln, -ern (with English)
-  const specialExamples = [
-    { verb: "lächeln (to smile)", du: "lächele", ihr: "lächelt", Sie: "lächeln Sie", wir: "lächeln wir", translation: "Smile!" },
-    { verb: "wandern (to hike)", du: "wandere", ihr: "wandert", Sie: "wandern Sie", wir: "wandern wir", translation: "Hike!" }
-  ];
+  // Verbs ending with -eln, -ern (with full imperative sentences)
+const specialExamples = [
+  { 
+    verb: "lächeln (to smile)", 
+    du: "lächele", 
+    ihr: "lächelt", 
+    Sie: "lächeln Sie", 
+    wir: "lächeln wir",
+    duFull: "Lächele!", 
+    ihrFull: "Lächelt!", 
+    SieFull: "Lächeln Sie!", 
+    wirFull: "Lächeln wir!" 
+  },
+  { 
+    verb: "wandern (to hike)", 
+    du: "wandere", 
+    ihr: "wandert", 
+    Sie: "wandern Sie", 
+    wir: "wandern wir",
+    duFull: "Wandere!", 
+    ihrFull: "Wandert!", 
+    SieFull: "Wandern Sie!", 
+    wirFull: "Wandern wir!" 
+  }
+];
 
   // Quiz data (random sentence to convert to imperative) with English meanings
   const quizBank = [

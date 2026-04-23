@@ -13,6 +13,7 @@ const navLinks = [
   { path: '/verbs', label: '⚡ Verbs' },
   { path: '/nouns', label: '🏷️ Nouns' },
   { path: '/chunks', label: '💬 Chunks' },
+  { path: '/past', label: ' 🧭 Past' },
   { path: '/stories', label: '📖 Stories' }, 
   { path: '/conversations', label: '💬 Conversations' },  
   { path: '/radio', label: '📻 Radio' }, 

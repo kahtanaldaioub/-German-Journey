@@ -3,36 +3,19 @@ import { Link, NavLink } from 'react-router-dom';
 
 const navLinks = [
   { path: '/', label: '🏠 Home' },
+  { path: '/a1-lessons', label: '🎓 A1 Course' },
   { path: '/flashcards', label: '📇 Flashcards' },
   { path: '/verb-quiz', label: '📝 Verb Quiz' },
   { path: '/noun-quiz', label: '🏷️ Noun Quiz' },
   { path: '/article-quiz', label: '🎯 Article Quiz' }, 
   { path: '/phrase-quiz', label: '💬 Phrase Quiz' },
-  { path: '/numbers', label: '🔢 Numbers' },
-  { path: '/days', label: '📅 Days' },
-  { path: '/months', label: '📆 Months' },
-  { path: '/time', label: '⏰ Time' },
-  { path: '/colors', label: '🎨 Colors' },
-  { path: '/alphabet', label: '🔤 Alphabet' },
-  { path: '/personal-pronouns', label: '👤 Personal Pronouns' },
-  { path: '/question-words', label: '❓ Question Words' },
-  { path: '/indefinite-articles', label: '📌 Indefinite Articles' },
-  { path: '/possessive', label: '📘 Possessive' }, 
   { path: '/sentence-structure', label: '📝 Structure' },
   { path: '/verbs', label: '⚡ Verbs' },
-  { path: '/conjugation-rules', label: '📖 Conjugation' },
   { path: '/nouns', label: '🏷️ Nouns' },
   { path: '/chunks', label: '💬 Chunks' },
-  { path: '/cases', label: '📚 Cases' },
-  { path: '/prepositions', label: '📍 Prepositions' },
-  { path: '/separable', label: '✂️ Separable' },
-  { path: '/particles', label: '✨ Particles' },
-  { path: '/comparatives', label: '📈 Comparatives' },
-  { path: '/past', label: '⏳ Past Tense' },
   { path: '/stories', label: '📖 Stories' }, 
   { path: '/conversations', label: '💬 Conversations' },  
   { path: '/radio', label: '📻 Radio' }, 
-  
 ];
 
 const Navbar = () => {

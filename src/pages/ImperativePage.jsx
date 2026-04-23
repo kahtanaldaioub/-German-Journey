@@ -22,72 +22,73 @@ const ImperativePage = () => {
     wir: { rule: "infinitive + wir", example: "Helfen wir ihm!", translation: "Let's help him!" }
   };
 
-  // Irregular verbs: sein, haben, werden (with English)
+  // Irregular verbs: sein, haben, werden (with full imperative sentences)
   const irregulars = [
-  { 
-    verb: "sein (to be)", 
-    du: "sei", 
-    ihr: "seid", 
-    Sie: "seien Sie", 
-    wir: "seien wir",
-    duFull: "Sei ruhig!", 
-    ihrFull: "Seid ruhig!", 
-    SieFull: "Seien Sie ruhig!", 
-    wirFull: "Seien wir ruhig!",
-    translation: "Be quiet!" 
-  },
-  { 
-    verb: "haben (to have)", 
-    du: "hab", 
-    ihr: "habt", 
-    Sie: "haben Sie", 
-    wir: "haben wir",
-    duFull: "Hab Geduld!", 
-    ihrFull: "Habt Geduld!", 
-    SieFull: "Haben Sie Geduld!", 
-    wirFull: "Haben wir Geduld!",
-    translation: "Have patience!" 
-  },
-  { 
-    verb: "werden (to become)", 
-    du: "werd", 
-    ihr: "werdet", 
-    Sie: "werden Sie", 
-    wir: "werden wir",
-    duFull: "Werd nicht böse!", 
-    ihrFull: "Werdet nicht böse!", 
-    SieFull: "Werden Sie nicht böse!", 
-    wirFull: "Werden wir nicht böse!",
-    translation: "Don't get angry!" 
-  }
-];
+    { 
+      verb: "sein (to be)", 
+      du: "sei", 
+      ihr: "seid", 
+      Sie: "seien Sie", 
+      wir: "seien wir",
+      duFull: "Sei ruhig!", 
+      ihrFull: "Seid ruhig!", 
+      SieFull: "Seien Sie ruhig!", 
+      wirFull: "Seien wir ruhig!",
+      translation: "Be quiet!" 
+    },
+    { 
+      verb: "haben (to have)", 
+      du: "hab", 
+      ihr: "habt", 
+      Sie: "haben Sie", 
+      wir: "haben wir",
+      duFull: "Hab Geduld!", 
+      ihrFull: "Habt Geduld!", 
+      SieFull: "Haben Sie Geduld!", 
+      wirFull: "Haben wir Geduld!",
+      translation: "Have patience!" 
+    },
+    { 
+      verb: "werden (to become)", 
+      du: "werd", 
+      ihr: "werdet", 
+      Sie: "werden Sie", 
+      wir: "werden wir",
+      duFull: "Werd nicht böse!", 
+      ihrFull: "Werdet nicht böse!", 
+      SieFull: "Werden Sie nicht böse!", 
+      wirFull: "Werden wir nicht böse!",
+      translation: "Don't get angry!" 
+    }
+  ];
 
-  // Verbs ending with -eln, -ern (with English)
   // Verbs ending with -eln, -ern (with full imperative sentences)
-const specialExamples = [
-  { 
-    verb: "lächeln (to smile)", 
-    du: "lächele", 
-    ihr: "lächelt", 
-    Sie: "lächeln Sie", 
-    wir: "lächeln wir",
-    duFull: "Lächele!", 
-    ihrFull: "Lächelt!", 
-    SieFull: "Lächeln Sie!", 
-    wirFull: "Lächeln wir!" 
-  },
-  { 
-    verb: "wandern (to hike)", 
-    du: "wandere", 
-    ihr: "wandert", 
-    Sie: "wandern Sie", 
-    wir: "wandern wir",
-    duFull: "Wandere!", 
-    ihrFull: "Wandert!", 
-    SieFull: "Wandern Sie!", 
-    wirFull: "Wandern wir!" 
-  }
-];
+  const specialExamples = [
+    { 
+      verb: "lächeln (to smile)", 
+      du: "lächle", 
+      ihr: "lächelt", 
+      Sie: "lächeln Sie", 
+      wir: "lächeln wir",
+      duFull: "Lächle!", 
+      ihrFull: "Lächelt!", 
+      SieFull: "Lächeln Sie!", 
+      wirFull: "Lächeln wir!",
+      translation: "Smile!" 
+    },
+    { 
+      verb: "wandern (to hike)", 
+      du: "wandere", 
+      ihr: "wandert", 
+      Sie: "wandern Sie", 
+      wir: "wandern wir",
+      duFull: "Wandere!", 
+      ihrFull: "Wandert!", 
+      SieFull: "Wandern Sie!", 
+      wirFull: "Wandern wir!",
+      translation: "Hike!" 
+    }
+  ];
 
   // Quiz data (random sentence to convert to imperative) with English meanings
   const quizBank = [
@@ -176,155 +177,157 @@ const specialExamples = [
           </div>
         </div>
 
-{/* Verbs ending with -eln, -ern */}
-<div className="bg-white rounded-xl p-5 shadow-md mb-6">
-  <h3 className="text-xl font-bold text-purple-700 mb-3">3️⃣ Verbs ending with -eln / -ern</h3>
-  <p className="text-sm text-gray-600 mb-4">These verbs drop the final 'e' of the stem in the du form (optional for -eln).</p>
-  
-  {/* Desktop table (hidden on mobile) */}
-  <div className="hidden md:block overflow-x-auto">
-    <table className="w-full text-sm border-collapse">
-      <thead>
-        <tr className="bg-gray-100">
-          <th className="p-2 text-left">Verb (infinitive)</th>
-          <th className="p-2 text-left">du</th>
-          <th className="p-2 text-left">ihr</th>
-          <th className="p-2 text-left">Sie</th>
-          <th className="p-2 text-left">wir</th>
-          <th className="p-2 text-left">Listen</th>
-        </tr>
-      </thead>
-      <tbody>
-        {specialExamples.map(ex => (
-          <tr key={ex.verb} className="border-b">
-            <td className="p-2 font-mono font-bold">{ex.verb}</td>
-            <td className="p-2 font-mono">{ex.du}</td>
-            <td className="p-2 font-mono">{ex.ihr}</td>
-            <td className="p-2 font-mono">{ex.Sie}</td>
-            <td className="p-2 font-mono">{ex.wir}</td>
-            <td className="p-2">
-              <div className="flex flex-wrap gap-1">
-                <PronounceButton word={ex.duFull} />
-                <PronounceButton word={ex.ihrFull} />
-                <PronounceButton word={ex.SieFull} />
-                <PronounceButton word={ex.wirFull} />
-              </div>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
+        {/* Verbs ending with -eln, -ern */}
+        <div className="bg-white rounded-xl p-5 shadow-md mb-6">
+          <h3 className="text-xl font-bold text-purple-700 mb-3">3️⃣ Verbs ending with -eln / -ern</h3>
+          <p className="text-sm text-gray-600 mb-4">These verbs drop the final 'e' of the stem in the du form (optional for -eln).</p>
+          
+          {/* Desktop table (hidden on mobile) */}
+          <div className="hidden md:block overflow-x-auto">
+            <table className="w-full text-sm border-collapse">
+              <thead>
+                <tr className="bg-gray-100">
+                  <th className="p-2 text-left">Verb (infinitive)</th>
+                  <th className="p-2 text-left">du</th>
+                  <th className="p-2 text-left">ihr</th>
+                  <th className="p-2 text-left">Sie</th>
+                  <th className="p-2 text-left">wir</th>
+                  <th className="p-2 text-left">Listen</th>
+                </tr>
+              </thead>
+              <tbody>
+                {specialExamples.map(ex => (
+                  <tr key={ex.verb} className="border-b">
+                    <td className="p-2 font-mono font-bold">{ex.verb}</td>
+                    <td className="p-2 font-mono">{ex.du}</td>
+                    <td className="p-2 font-mono">{ex.ihr}</td>
+                    <td className="p-2 font-mono">{ex.Sie}</td>
+                    <td className="p-2 font-mono">{ex.wir}</td>
+                    <td className="p-2">
+                      <div className="flex flex-wrap gap-1">
+                        <PronounceButton word={ex.duFull} />
+                        <PronounceButton word={ex.ihrFull} />
+                        <PronounceButton word={ex.SieFull} />
+                        <PronounceButton word={ex.wirFull} />
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
-  {/* Mobile card layout (visible only on small screens) */}
-  <div className="md:hidden space-y-4">
-    {specialExamples.map(ex => (
-      <div key={ex.verb} className="bg-gray-50 rounded-xl p-4 shadow-sm">
-        <div className="font-mono font-bold text-lg text-purple-700 mb-3">{ex.verb}</div>
-        <div className="space-y-2">
-          <div className="flex justify-between items-center">
-            <span className="font-semibold text-purple-600 w-12">du:</span>
-            <span className="font-mono flex-1 ml-2">{ex.du}</span>
-            <PronounceButton word={ex.duFull} />
+          {/* Mobile card layout (visible only on small screens) */}
+          <div className="md:hidden space-y-4">
+            {specialExamples.map(ex => (
+              <div key={ex.verb} className="bg-gray-50 rounded-xl p-4 shadow-sm">
+                <div className="font-mono font-bold text-lg text-purple-700 mb-3">{ex.verb}</div>
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center">
+                    <span className="font-semibold text-purple-600 w-12">du:</span>
+                    <span className="font-mono flex-1 ml-2">{ex.du}</span>
+                    <PronounceButton word={ex.duFull} />
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="font-semibold text-purple-600 w-12">ihr:</span>
+                    <span className="font-mono flex-1 ml-2">{ex.ihr}</span>
+                    <PronounceButton word={ex.ihrFull} />
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="font-semibold text-purple-600 w-12">Sie:</span>
+                    <span className="font-mono flex-1 ml-2">{ex.Sie}</span>
+                    <PronounceButton word={ex.SieFull} />
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="font-semibold text-purple-600 w-12">wir:</span>
+                    <span className="font-mono flex-1 ml-2">{ex.wir}</span>
+                    <PronounceButton word={ex.wirFull} />
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
-          <div className="flex justify-between items-center">
-            <span className="font-semibold text-purple-600 w-12">ihr:</span>
-            <span className="font-mono flex-1 ml-2">{ex.ihr}</span>
-            <PronounceButton word={ex.ihrFull} />
-          </div>
-          <div className="flex justify-between items-center">
-            <span className="font-semibold text-purple-600 w-12">Sie:</span>
-            <span className="font-mono flex-1 ml-2">{ex.Sie}</span>
-            <PronounceButton word={ex.SieFull} />
-          </div>
-          <div className="flex justify-between items-center">
-            <span className="font-semibold text-purple-600 w-12">wir:</span>
-            <span className="font-mono flex-1 ml-2">{ex.wir}</span>
-            <PronounceButton word={ex.wirFull} />
+
+          <div className="mt-3 text-sm bg-blue-50 p-2 rounded">
+            💡 For verbs ending in -eln, the du form often drops the middle 'e': <em>läch(e)le</em> (smile), <em>sam(e)le</em> (collect). The wir form is identical to the infinitive.
           </div>
         </div>
-      </div>
-    ))}
-  </div>
 
-  <div className="mt-3 text-sm bg-blue-50 p-2 rounded">
-    💡 For verbs ending in -eln, the du form often drops the middle 'e': <em>läch(e)le</em> (smile), <em>sam(e)le</em> (collect). The wir form is identical to the infinitive.
-  </div>
-</div>
-{/* Irregular Verbs */}
-<div className="bg-white rounded-xl p-5 shadow-md mb-6">
-  <h3 className="text-xl font-bold text-purple-700 mb-3">4️⃣ Irregular Verbs (sein, haben, werden)</h3>
-  
-  {/* Desktop table (hidden on mobile) */}
-  <div className="hidden md:block overflow-x-auto">
-    <table className="w-full text-sm border-collapse">
-      <thead>
-        <tr className="bg-gray-100">
-          <th className="p-2 text-left">Verb</th>
-          <th className="p-2 text-left">du</th>
-          <th className="p-2 text-left">ihr</th>
-          <th className="p-2 text-left">Sie</th>
-          <th className="p-2 text-left">wir</th>
-          <th className="p-2">Listen</th>
-        </tr>
-      </thead>
-      <tbody>
-        {irregulars.map(irr => (
-          <tr key={irr.verb} className="border-b">
-            <td className="p-2 font-medium">{irr.verb}</td>
-            <td className="p-2 font-mono">{irr.du}</td>
-            <td className="p-2 font-mono">{irr.ihr}</td>
-            <td className="p-2 font-mono">{irr.Sie}</td>
-            <td className="p-2 font-mono">{irr.wir}</td>
-            <td className="p-2">
-              <div className="flex flex-wrap gap-1">
-                <PronounceButton word={irr.duFull} />
-                <PronounceButton word={irr.ihrFull} />
-                <PronounceButton word={irr.SieFull} />
-                <PronounceButton word={irr.wirFull} />
+        {/* Irregular Verbs */}
+        <div className="bg-white rounded-xl p-5 shadow-md mb-6">
+          <h3 className="text-xl font-bold text-purple-700 mb-3">4️⃣ Irregular Verbs (sein, haben, werden)</h3>
+          
+          {/* Desktop table (hidden on mobile) */}
+          <div className="hidden md:block overflow-x-auto">
+            <table className="w-full text-sm border-collapse">
+              <thead>
+                <tr className="bg-gray-100">
+                  <th className="p-2 text-left">Verb</th>
+                  <th className="p-2 text-left">du</th>
+                  <th className="p-2 text-left">ihr</th>
+                  <th className="p-2 text-left">Sie</th>
+                  <th className="p-2 text-left">wir</th>
+                  <th className="p-2">Listen</th>
+                </tr>
+              </thead>
+              <tbody>
+                {irregulars.map(irr => (
+                  <tr key={irr.verb} className="border-b">
+                    <td className="p-2 font-medium">{irr.verb}</td>
+                    <td className="p-2 font-mono">{irr.du}</td>
+                    <td className="p-2 font-mono">{irr.ihr}</td>
+                    <td className="p-2 font-mono">{irr.Sie}</td>
+                    <td className="p-2 font-mono">{irr.wir}</td>
+                    <td className="p-2">
+                      <div className="flex flex-wrap gap-1">
+                        <PronounceButton word={irr.duFull} />
+                        <PronounceButton word={irr.ihrFull} />
+                        <PronounceButton word={irr.SieFull} />
+                        <PronounceButton word={irr.wirFull} />
+                      </div>
+                    </td>
+                   </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Mobile card layout (visible only on small screens) */}
+          <div className="md:hidden space-y-4">
+            {irregulars.map(irr => (
+              <div key={irr.verb} className="bg-gray-50 rounded-xl p-4 shadow-sm">
+                <div className="font-bold text-purple-700 mb-3">{irr.verb}</div>
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center">
+                    <span className="font-semibold text-purple-600 w-12">du:</span>
+                    <span className="font-mono flex-1 ml-2">{irr.du}</span>
+                    <PronounceButton word={irr.duFull} />
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="font-semibold text-purple-600 w-12">ihr:</span>
+                    <span className="font-mono flex-1 ml-2">{irr.ihr}</span>
+                    <PronounceButton word={irr.ihrFull} />
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="font-semibold text-purple-600 w-12">Sie:</span>
+                    <span className="font-mono flex-1 ml-2">{irr.Sie}</span>
+                    <PronounceButton word={irr.SieFull} />
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="font-semibold text-purple-600 w-12">wir:</span>
+                    <span className="font-mono flex-1 ml-2">{irr.wir}</span>
+                    <PronounceButton word={irr.wirFull} />
+                  </div>
+                </div>
               </div>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  </div>
+            ))}
+          </div>
 
-  {/* Mobile card layout (visible only on small screens) */}
-  <div className="md:hidden space-y-4">
-    {irregulars.map(irr => (
-      <div key={irr.verb} className="bg-gray-50 rounded-xl p-4 shadow-sm">
-        <div className="font-bold text-purple-700 mb-3">{irr.verb}</div>
-        <div className="space-y-2">
-          <div className="flex justify-between items-center">
-            <span className="font-semibold text-purple-600 w-12">du:</span>
-            <span className="font-mono flex-1 ml-2">{irr.du}</span>
-            <PronounceButton word={irr.duFull} />
-          </div>
-          <div className="flex justify-between items-center">
-            <span className="font-semibold text-purple-600 w-12">ihr:</span>
-            <span className="font-mono flex-1 ml-2">{irr.ihr}</span>
-            <PronounceButton word={irr.ihrFull} />
-          </div>
-          <div className="flex justify-between items-center">
-            <span className="font-semibold text-purple-600 w-12">Sie:</span>
-            <span className="font-mono flex-1 ml-2">{irr.Sie}</span>
-            <PronounceButton word={irr.SieFull} />
-          </div>
-          <div className="flex justify-between items-center">
-            <span className="font-semibold text-purple-600 w-12">wir:</span>
-            <span className="font-mono flex-1 ml-2">{irr.wir}</span>
-            <PronounceButton word={irr.wirFull} />
+          <div className="mt-3 text-sm bg-blue-50 p-2 rounded">
+            💡 Example: {irregulars[0].duFull} – {irregulars[0].translation}
           </div>
         </div>
-      </div>
-    ))}
-  </div>
 
-  <div className="mt-3 text-sm bg-blue-50 p-2 rounded">
-    💡 Example: {irregulars[0].duFull} – {irregulars[0].translation}
-  </div>
-</div>
         {/* Quiz */}
         <div className="mt-8 p-5 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-xl">
           <h3 className="text-xl font-bold text-center mb-3">🎯 Practice: Build the Imperative</h3>

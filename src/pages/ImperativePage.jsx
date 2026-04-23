@@ -324,8 +324,15 @@ const ImperativePage = () => {
           </div>
 
           <div className="mt-3 text-sm bg-blue-50 p-2 rounded">
-            💡 Example: {irregulars[0].duFull} – {irregulars[0].translation}
-          </div>
+  <p className="font-semibold mb-1">💡 Examples:</p>
+  <ul className="list-disc list-inside space-y-1">
+    {irregulars.map(irr => (
+      <li key={irr.verb}>
+        <span className="font-mono">{irr.duFull}</span> – {irr.translation}
+      </li>
+    ))}
+  </ul>
+</div>
         </div>
 
         {/* Quiz */}

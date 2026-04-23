@@ -2,18 +2,22 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+
 const HomePage = () => {
-const navigate=useNavigate()
+  const navigate = useNavigate();
+
   const quizRoutes = [
     '/verb-quiz',
     '/noun-quiz',
     '/phrase-quiz',
     '/article-quiz'
   ];
+
   const handleRandomQuiz = () => {
     const randomIndex = Math.floor(Math.random() * quizRoutes.length);
     navigate(quizRoutes[randomIndex]);
   };
+
   return (
     <>
       <section className="min-h-screen flex flex-col justify-center items-center text-center px-4 py-20">
@@ -21,7 +25,7 @@ const navigate=useNavigate()
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="text-5xl md:text-7xl font-extrabold bg-clip-text text-transparent bg-linear-to-r from-purple-600 to-pink-600"
+          className="text-5xl md:text-7xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-pink-600"
         >
           🇩🇪 German Journey
         </motion.h1>
@@ -42,15 +46,18 @@ const navigate=useNavigate()
           <Link to="/flashcards" className="bg-purple-600 text-white px-8 py-3 rounded-full font-bold shadow-lg hover:bg-purple-700 transition transform hover:scale-105">
             Start Learning →
           </Link>
-           <button
-              onClick={handleRandomQuiz}
-              className="bg-white text-purple-600 px-8 py-3 rounded-full font-bold shadow-lg border-2 border-purple-600 hover:bg-purple-50 transition transform hover:scale-105"
-              >
-              Take a Quiz
-           </button>
-          {/* New Radio Button */}
-          <Link to="/radio" className="bg-linear-to-r from-purple-500 to-pink-500 text-white px-8 py-3 rounded-full font-bold shadow-lg hover:from-purple-600 hover:to-pink-600 transition transform hover:scale-105">
+          <button
+            onClick={handleRandomQuiz}
+            className="bg-white text-purple-600 px-8 py-3 rounded-full font-bold shadow-lg border-2 border-purple-600 hover:bg-purple-50 transition transform hover:scale-105"
+          >
+            Take a Quiz
+          </button>
+          <Link to="/radio" className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-8 py-3 rounded-full font-bold shadow-lg hover:from-purple-600 hover:to-pink-600 transition transform hover:scale-105">
             📻 Live Radio
+          </Link>
+          {/* NEW: A1 Course Button */}
+          <Link to="/a1-lessons" className="bg-green-600 text-white px-8 py-3 rounded-full font-bold shadow-lg hover:bg-green-700 transition transform hover:scale-105">
+            🎓 A1 Course
           </Link>
         </motion.div>
       </section>
@@ -76,18 +83,32 @@ const navigate=useNavigate()
             </div>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          {/* Second row – now 3 cards (Radio, Stories, A1 Course) */}
+          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
             <div className="bg-white rounded-2xl p-6 shadow-lg text-center">
               <div className="text-4xl mb-3">📻</div>
               <h3 className="text-xl font-bold mb-2">Live German Radio</h3>
               <p className="text-gray-600">Stream real German radio stations and improve listening comprehension.</p>
-              
+              <Link to="/radio" className="inline-block mt-3 text-purple-600 hover:text-purple-800 font-medium">
+                Listen now →
+              </Link>
             </div>
             <div className="bg-white rounded-2xl p-6 shadow-lg text-center">
               <div className="text-4xl mb-3">📖</div>
               <h3 className="text-xl font-bold mb-2">Short Stories</h3>
               <p className="text-gray-600">Read bilingual stories with audio – perfect for building vocabulary in context.</p>
-              
+              <Link to="/stories" className="inline-block mt-3 text-purple-600 hover:text-purple-800 font-medium">
+                Read stories →
+              </Link>
+            </div>
+            {/* NEW: A1 Course Card */}
+            <div className="bg-white rounded-2xl p-6 shadow-lg text-center">
+              <div className="text-4xl mb-3">🎓</div>
+              <h3 className="text-xl font-bold mb-2">A1 Full Course</h3>
+              <p className="text-gray-600">56 structured lessons – from alphabet to grammar, shopping, travel & more.</p>
+              <Link to="/a1-lessons" className="inline-block mt-3 text-purple-600 hover:text-purple-800 font-medium">
+                Start course →
+              </Link>
             </div>
           </div>
         </div>

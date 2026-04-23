@@ -334,10 +334,19 @@ export const a1Lessons = [
     icon: "📍",
     completed: false
   },
+  {
+    id: 37,
+    title: "Past",
+    description: "Reflect on your past experiences.",
+    duration: "30 min",
+    path: "/past",
+    icon: "🧭",
+    completed: false
+  },
 
   // ==================== QUESTION WORDS ====================
   {
-    id: 37,
+    id: 38,
     title: "Question Words (W-Fragen)",
     description: "Master wer, was, wo, wann, warum, wie, woher, wohin – essential for asking questions.",
     duration: "20 min",
@@ -348,7 +357,7 @@ export const a1Lessons = [
 
   // ==================== ADJECTIVES ====================
   {
-    id: 38,
+    id: 39,
     title: "Adjectives & Opposites",
     description: "Learn common German adjectives and their opposites with example sentences and a matching quiz.",
     duration: "20 min",
@@ -359,7 +368,7 @@ export const a1Lessons = [
 
   // ==================== PRACTICAL SITUATIONS ====================
   {
-    id: 39,
+    id: 40,
     title: "In the Supermarket",
     description: "Essential vocabulary for grocery shopping: items, prices, and asking for help.",
     duration: "20 min",
@@ -368,7 +377,7 @@ export const a1Lessons = [
     completed: false
   },
   {
-    id: 40,
+    id: 41,
     title: "Ordering in a Restaurant",
     description: "Phrases for dining out: ordering food, asking for the menu, paying the bill.",
     duration: "20 min",
@@ -377,7 +386,7 @@ export const a1Lessons = [
     completed: false
   },
   {
-    id: 41,
+    id: 42,
     title: "Shopping for Clothes",
     description: "Essential vocabulary for buying clothes, asking for sizes, colors, and paying.",
     duration: "20 min",
@@ -386,7 +395,7 @@ export const a1Lessons = [
     completed: false
   },
   {
-    id: 42,
+    id: 43,
     title: "At the Doctor",
     description: "Vocabulary and phrases for visiting a doctor, describing symptoms, and getting prescriptions.",
     duration: "20 min",
@@ -395,7 +404,7 @@ export const a1Lessons = [
     completed: false
   },
   {
-    id: 43,
+    id: 44,
     title: "To Be Ill",
     description: "Symptoms, doctor visits, pharmacy – everything you need when you feel sick.",
     duration: "20 min",
@@ -404,7 +413,7 @@ export const a1Lessons = [
     completed: false
   },
   {
-    id: 44,
+    id: 45,
     title: "At the Pharmacy / Chemist",
     description: "Buy medicine, ask for advice, and fill prescriptions at the Apotheke.",
     duration: "20 min",
@@ -413,7 +422,7 @@ export const a1Lessons = [
     completed: false
   },
   {
-    id: 45,
+    id: 46,
     title: "Buying a Train Ticket",
     description: "Navigate train stations, ask for departures, buy tickets, and understand platforms.",
     duration: "20 min",
@@ -422,7 +431,7 @@ export const a1Lessons = [
     completed: false
   },
   {
-    id: 46,
+    id: 47,
     title: "Hiring a Taxi",
     description: "Phrases for taking a taxi, giving addresses, asking about fares.",
     duration: "20 min",
@@ -431,7 +440,7 @@ export const a1Lessons = [
     completed: false
   },
   {
-    id: 47,
+    id: 48,
     title: "Asking for Directions",
     description: "Essential phrases to find your way – left, right, straight ahead, etc.",
     duration: "20 min",
@@ -440,7 +449,7 @@ export const a1Lessons = [
     completed: false
   },
   {
-    id: 48,
+    id: 49,
     title: "Apartment Hunting",
     description: "Vocabulary and phrases for renting an apartment – viewings, rent, deposit, landlord.",
     duration: "20 min",
@@ -449,7 +458,7 @@ export const a1Lessons = [
     completed: false
   },
   {
-    id: 49,
+    id: 50,
     title: "The Post Office",
     description: "Learn to send letters, parcels, buy stamps, and ask for postal services.",
     duration: "20 min",
@@ -458,7 +467,7 @@ export const a1Lessons = [
     completed: false
   },
   {
-    id: 50,
+    id: 51,
     title: "The Bank",
     description: "Essential banking vocabulary – withdrawing money, opening accounts, using ATMs.",
     duration: "20 min",
@@ -467,7 +476,7 @@ export const a1Lessons = [
     completed: false
   },
   {
-    id: 51,
+    id: 52,
     title: "Telephone Conversations",
     description: "Common phrases for making and receiving phone calls in German.",
     duration: "20 min",
@@ -476,7 +485,7 @@ export const a1Lessons = [
     completed: false
   },
   {
-    id: 52,
+    id: 53,
     title: "Making Appointments",
     description: "Phrases for scheduling, rescheduling, and canceling appointments.",
     duration: "20 min",
@@ -487,7 +496,7 @@ export const a1Lessons = [
 
   // ==================== EXPRESSING OPINIONS & LIKES ====================
   {
-    id: 53,
+    id: 54,
     title: "Expressing Likes & Dislikes",
     description: "Say what you like, love, hate, or are interested in – with examples.",
     duration: "20 min",
@@ -496,7 +505,7 @@ export const a1Lessons = [
     completed: false
   },
   {
-    id: 54,
+    id: 55,
     title: "Talking about Weather",
     description: "Describe sunny, rainy, snowy, windy weather – perfect for small talk.",
     duration: "20 min",
@@ -507,7 +516,7 @@ export const a1Lessons = [
 
   // ==================== WRITING & OFFICIAL FORMS ====================
   {
-    id: 55,
+    id: 56,
     title: "Letter Writing (Formal)",
     description: "Learn salutations, closings, and useful phrases for formal letters and emails.",
     duration: "20 min",
@@ -516,7 +525,7 @@ export const a1Lessons = [
     completed: false
   },
   {
-    id: 56,
+    id: 57,
     title: "Filling in a Form",
     description: "Essential vocabulary for completing official forms: name, address, date of birth, etc.",
     duration: "20 min",

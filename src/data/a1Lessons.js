@@ -76,8 +76,8 @@ export const a1Lessons = [
   },
   {
     id: 9,
-    title: "Months & Seasons",
-    description: "Master the 12 months (Januar bis Dezember) and the four seasons (Frühling, Sommer, Herbst, Winter).",
+    title: "Months ",
+    description: "Master the 12 months (Januar bis Dezember) .",
     duration: "15 min",
     path: "/months",
     icon: "📆",
